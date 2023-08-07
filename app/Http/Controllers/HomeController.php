@@ -30,7 +30,19 @@ class HomeController extends Controller
             'users' => $users,
             //...
         ];
+        $data = [
+            'title' => 'Dashboard',
+            'widget' => $widget,
+        ];
 
-        return view('home', compact('widget'));
+        return view('pages.home', $data);
+    }
+    public function profile()
+    {
+        $data = [
+            'title' => 'Profile',
+        ];
+
+        return view('pages.akun.index', $data);
     }
 }

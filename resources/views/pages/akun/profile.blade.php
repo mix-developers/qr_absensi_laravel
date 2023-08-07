@@ -29,14 +29,14 @@
 
             <div class="card shadow mb-4">
                 <div class="card-profile-image mt-4">
-                    <figure class="rounded-circle avatar avatar font-weight-bold" style="font-size: 60px; height: 180px; width: 180px;" data-initial="{{ Auth::user()->name[0] }}"></figure>
+                    <figure class="rounded-circle avatar avatar font-weight-bold" style="font-size: 60px; height: 180px; width: 180px;" data-initial="{{ isset(Auth::user()->name[0]) ? Auth::user()->name[0] : Auth::guard('pegawai')->user()->nama[0] }}"></figure>
                 </div>
                 <div class="card-body">
 
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="text-center">
-                                <h5 class="font-weight-bold">{{  Auth::user()->fullName }}</h5>
+                                <h5 class="font-weight-bold">{{  isset(Auth::user()->fullName) ? Auth::user()->fullName : Auth::guard('pegawai')->user()->nama }}</h5>
                                 <p>Administrator</p>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group focused">
                                         <label class="form-control-label" for="name">Name<span class="small text-danger">*</span></label>
-                                        <input type="text" id="name" class="form-control" name="name" placeholder="Name" value="{{ old('name', Auth::user()->name) }}">
+                                        <input type="text" id="name" class="form-control" name="name" placeholder="Name" value="{{ isset(Auth::user()->name) ? Auth::user()->name : Auth::guard('pegawai')->user()->nama }}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">

@@ -16,7 +16,10 @@ class ProfileController extends Controller
 
     public function index()
     {
-        return view('profile');
+        $data = [
+            'title' => 'Profile',
+        ];
+        return view('pages.akun.profile', $data);
     }
 
     public function update(Request $request)
