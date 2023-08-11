@@ -4,7 +4,7 @@
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
-
+@stack('js')
 {{-- datatable  --}}
 <script>
     // $(document).ready(function() {
@@ -26,6 +26,16 @@
     // });
     // Call the dataTables jQuery plugin
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            responsive: true,
+        });
+    });
+    $(document).ready(function() {
+        $('#dataTable-export').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
     });
 </script>

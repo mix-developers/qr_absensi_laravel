@@ -25,6 +25,63 @@
     <div class="sidebar-heading">
         {{ __('Master Data') }}
     </div>
+    <!-- Nav Item - Class -->
+    <li class="nav-item {{ Nav::isRoute('class') }}">
+        <a class="nav-link" href="{{ route('class') }}">
+            <i class="fas fa-fw fa-home"></i>
+            <span>{{ __('Kelas') }}</span>
+        </a>
+    </li>
+    <!-- Nav Item - Ruangan -->
+    <li class="nav-item {{ Nav::isRoute('ruangan') }}">
+        <a class="nav-link" href="{{ route('ruangan') }}">
+            <i class="fas fa-fw fa-home"></i>
+            <span>{{ __('Ruangan') }}</span>
+        </a>
+    </li>
+    <!-- Nav Item - Mata kuliah -->
+    <li class="nav-item {{ Nav::isRoute('matakuliah') }}">
+        <a class="nav-link" href="{{ route('matakuliah') }}">
+            <i class="fas fa-fw fa-book"></i>
+            <span>{{ __('Matakuliah') }}</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        {{ __('Jadwal') }}
+    </div>
+    <!-- Nav Item - Jadwal -->
+    <li class="nav-item {{ Nav::isRoute('jadwal') }}">
+        <a class="nav-link" href="{{ route('jadwal') }}">
+            <i class="fas fa-fw fa-calendar"></i>
+            <span>{{ __('Jadwal') }}</span>
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        {{ __('Absensi') }}
+    </div>
+    <!-- Nav Item - buat absen -->
+    <li class="nav-item {{ Nav::isRoute('absen') }}">
+        <a class="nav-link" href="{{ route('absen') }}">
+            <i class="fas fa-fw fa-qrcode"></i>
+            <span>{{ __('Buat Absen') }}</span>
+        </a>
+    </li>
+    <!-- Nav Item - buat absen -->
+    <li class="nav-item {{ Nav::isRoute('scan') }}">
+        <a class="nav-link" href="{{ route('scan') }}">
+            <i class="fas fa-fw fa-qrcode"></i>
+            <span>{{ __('Absen') }}</span>
+        </a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">

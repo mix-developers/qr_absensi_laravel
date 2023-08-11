@@ -9,12 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
+        "barryvdh/laravel-debugbar": "^3.8",
         "devmarketer/easynav": "^1.0",
         "guzzlehttp/guzzle": "^7.7",
+        "intervention/image": "^2.7",
         "laravel/framework": "^9.19",
         "laravel/legacy-factories": "^1.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "symfony/http-client": "^6.0",
         "symfony/mailgun-mailer": "^6.0",
         "symfony/postmark-mailer": "^6.0"
