@@ -60,5 +60,6 @@
                 </table>
             </div>
         </div>
-        @include('pages.jadwal.components.modal_create')
-    @endsection
+    </div>
+    @include('pages.jadwal.components.modal_create')
+@endsection

@@ -28,6 +28,8 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+
+
     /**
      * Create a new controller instance.
      *
@@ -40,6 +42,17 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        // if (auth()->user()->role == 'admin' || auth()->user()->role == 'super_admin') {
+        //     return '/admin';
+        // } elseif (auth()->user()->role == 'dosen') {
+        //     return '/dosen';
+        // } elseif (auth()->user()->role == 'mahasiswa') {
+        //     return '/mahasiswa';
+        // } else {
+        //     return '/ketua_jurusan';
+        // }
+        // return '/';
+
         session()->flash('success', 'You are logged in!');
         return $this->redirectTo;
     }

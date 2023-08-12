@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jadwal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,7 @@ class HomeController extends Controller
         $data = [
             'title' => 'Dashboard',
             'widget' => $widget,
+            'jadwal' => Jadwal::all(),
         ];
 
         return view('pages.home', $data);
