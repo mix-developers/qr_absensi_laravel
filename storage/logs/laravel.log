@@ -8193,3 +8193,27 @@ Did you mean this?
 #50 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\server.php(21): require_once('D:\\\\projek\\\\skrip...')
 #51 {main}
 "} 
+[2023-08-15 05:04:20] local.ERROR: Unable to prepare route [home] for serialization. Another route has already been assigned name [home]. {"exception":"[object] (LogicException(code: 0): Unable to prepare route [home] for serialization. Another route has already been assigned name [home]. at D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\AbstractRouteCollection.php:247)
+[stacktrace]
+#0 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\AbstractRouteCollection.php(208): Illuminate\\Routing\\AbstractRouteCollection->addToSymfonyRoutesCollection(Object(Symfony\\Component\\Routing\\RouteCollection), Object(Illuminate\\Routing\\Route))
+#1 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\RouteCollection.php(246): Illuminate\\Routing\\AbstractRouteCollection->toSymfonyRouteCollection()
+#2 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\AbstractRouteCollection.php(192): Illuminate\\Routing\\RouteCollection->toSymfonyRouteCollection()
+#3 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\AbstractRouteCollection.php(163): Illuminate\\Routing\\AbstractRouteCollection->dumper()
+#4 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteCacheCommand.php(120): Illuminate\\Routing\\AbstractRouteCollection->compile()
+#5 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\RouteCacheCommand.php(79): Illuminate\\Foundation\\Console\\RouteCacheCommand->buildRouteCacheFile(Object(Illuminate\\Routing\\RouteCollection))
+#6 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Console\\RouteCacheCommand->handle()
+#7 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#8 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#9 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#10 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(661): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#11 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
+#12 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\symfony\\console\\Command\\Command.php(291): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#13 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(153): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#14 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\symfony\\console\\Application.php(1014): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\symfony\\console\\Application.php(301): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteCacheCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(102): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#18 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(155): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 D:\\projek\\skripsi\\absensi mahasiswa\\absensi_qr_code\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 {main}
+"} 

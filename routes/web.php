@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', [LoginController::class, 'login'])->name('login');
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::put('/profile', 'ProfileController@update')->name('profile.update');
