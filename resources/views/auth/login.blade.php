@@ -30,7 +30,7 @@
 
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" name="identity"
-                                                placeholder="{{ __('NIP') }}" value="{{ old('nip') }}" required
+                                                placeholder="{{ __('NIP/NIDN/NPM') }}" value="{{ old('nip') }}" required
                                                 autofocus>
                                         </div>
 
