@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0",
         "barryvdh/laravel-debugbar": "^3.8",
+        "barryvdh/laravel-dompdf": "^2.0",
         "devmarketer/easynav": "^1.0",
         "guzzlehttp/guzzle": "^7.7",
         "intervention/image": "^2.7",

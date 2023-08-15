@@ -4,6 +4,9 @@
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 @stack('js')
 {{-- datatable  --}}
 <script>
@@ -38,4 +41,9 @@
             ]
         });
     });
+    config = {
+        enableTime: true,
+        dateFormat: 'd-m-Y H:i',
+    }
+    flatpickr("input[type=datetime-local]", config);
 </script>

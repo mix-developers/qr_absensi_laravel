@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\DataAbasenController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,9 +50,14 @@ Route::group(['middleware' => ['admin']], function () {
     Route::delete('/matakuliah/destroy/{id}', [MataKuliahController::class, 'destroy'])->name('matakuliah.destroy');
     //jadwal
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
+    Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
+    Route::get('/jadwal/input_mahasiswa/{id}', [JadwalController::class, 'input_mahasiswa'])->name('jadwal.input_mahasiswa');
     Route::post('/jadwal/store', [JadwalController::class, 'store'])->name('jadwal.store');
+    Route::post('/jadwal/storeInput', [JadwalController::class, 'storeInput'])->name('jadwal.storeInput');
     Route::put('/jadwal/update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
     Route::delete('/jadwal/destroy/{id}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+    Route::delete('/jadwal/destroyInput/{id}', [JadwalController::class, 'destroyInput'])->name('jadwal.destroyInput');
+    Route::get('/jadwal/exportAbsen/{id}', [JadwalController::class, 'exportAbsen'])->name('jadwal.exportAbsen');
     //absen
     Route::get('/scan', [AbsenController::class, 'scan'])->name('scan');
     Route::post('/scan/createAbsen', [AbsenController::class, 'createAbsen'])->name('createAbsen');
@@ -59,10 +66,12 @@ Route::group(['middleware' => ['admin']], function () {
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');
     Route::put('/absen/update/{id}', [AbsenController::class, 'update'])->name('absen.update');
     Route::delete('/absen/destroy/{id}', [AbsenController::class, 'destroy'])->name('absen.destroy');
+    //user
+    Route::get('/user/mahasiswa', [UserController::class, 'mahasiswa'])->name('user.mahasiswa');
 
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
+    // Route::get('/about', function () {
+    //     return view('about');
+    // })->name('about');
 });
 Route::group(['middleware' => ['mahasiswa']], function () {
 
@@ -72,7 +81,9 @@ Route::group(['middleware' => ['mahasiswa']], function () {
     Route::post('/scan/absenMahasiswa', [AbsenController::class, 'absenMahasiswa'])->name('scan.absenMahasiswa');
 });
 Route::group(['middleware' => ['dosen']], function () {
-
+    //jadwal
+    Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
+    Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
     //absen
     Route::get('/absen', [AbsenController::class, 'index'])->name('absen');
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');

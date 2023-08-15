@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absen;
+use App\Models\AbsenMahasiswa;
 use App\Models\Jadwal;
+use App\Models\JadwalMahasiswa;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Crypt;
 
 class JadwalController extends Controller
 {
@@ -14,11 +21,41 @@ class JadwalController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role == 'dosen') {
+            $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
+        } else {
+            $jadwal = Jadwal::all();
+        }
         $data = [
             'title' => 'Data Jadwa Kuliah',
-            'jadwal' => Jadwal::all(),
+
+            'jadwal' => $jadwal,
         ];
         return view('pages.jadwal.index', $data);
+    }
+    public function show($id)
+    {
+        $ID = Crypt::decryptString($id);
+        // dd($id);
+        $jadwal = Jadwal::find($ID);
+        $data = [
+            'title' => 'Data Absen Kuliah',
+            'jadwal' => $jadwal,
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+        ];
+        return view('pages.jadwal.show', $data);
+    }
+    public function input_mahasiswa($id)
+    {
+        $user = User::find($id);
+        // dd($id);
+        $data = [
+            'title' => 'Data Input Jadwal mahasiswa : ' . $user->name,
+            'user' => $user,
+            'jadwal' => Jadwal::all(),
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_user', $user->id)->get(),
+        ];
+        return view('pages.jadwal.input_mahasiswa', $data);
     }
 
     /**
@@ -62,6 +99,24 @@ class JadwalController extends Controller
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } else {
             return redirect()->back()->with('danger', 'Gagal menambahkan data');
+        }
+    }
+
+    public function storeInput(Request $request)
+    {
+        $request->validate([
+            'id_jadwal' => ['required'],
+            'id_user' => ['required'],
+
+        ]);
+        $JadwalMahasiswa = new JadwalMahasiswa();
+        $JadwalMahasiswa->id_jadwal = $request->id_jadwal;
+        $JadwalMahasiswa->id_user = $request->id_user;
+
+        if ($JadwalMahasiswa->save()) {
+            return redirect()->back()->with('success', 'Berhasil membuat jadwal');
+        } else {
+            return redirect()->back()->with('danger', 'Gagal membuat jadwal');
         }
     }
 
@@ -112,5 +167,21 @@ class JadwalController extends Controller
         $Jadwal = Jadwal::find($id);
         $Jadwal->delete();
         return redirect()->back()->with('success', 'Berhasil menghapus data');
+    }
+    public function destroyInput($id)
+    {
+        $Jadwal = JadwalMahasiswa::find($id);
+        $Jadwal->delete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data');
+    }
+    public function exportAbsen($id)
+    {
+        $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
+
+        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_absen', [
+            'data' => $data,
+        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+
+        return $pdf->stream('Data Absen '  . date('d-m-Y') . '.pdf');
     }
 }

@@ -16,7 +16,7 @@ class AbsenController extends Controller
     {
         $data = [
             'title' => 'Buat Absen',
-            'absen' => Absen::all(),
+            'absen' => Absen::where('id_user', Auth::user()->id)->get(),
         ];
         return view('pages.absen.index', $data);
     }
@@ -32,17 +32,23 @@ class AbsenController extends Controller
     {
         $code_bcript = $request->code;
         $absen = Absen::where('code_absen', $code_bcript)->first();
-        // $minute_start = $absen->created_at->minute;
-        // $minute_and = $minute_start + 30;
-        // dd($menit);
+        $now = date('d-m-Y H:i');
+
         if ($absen != null) {
-            $jadwal = Jadwal::find($absen->id_jadwal);
-            if ($jadwal != null) {
-                $Absen = new AbsenMahasiswa();
-                $Absen->id_jadwal = $jadwal->id;
-                $Absen->id_user = Auth::user()->id;
-                $Absen->save();
-                return redirect()->back()->with('success', 'Berhasil membuat absen');
+            $expired = $absen->expired_date;
+            if ($expired <= $now) {
+                $jadwal = Jadwal::find($absen->id_jadwal);
+                if ($jadwal != null) {
+                    $Absen = new AbsenMahasiswa();
+                    $Absen->id_jadwal = $jadwal->id;
+                    $Absen->id_user = Auth::user()->id;
+                    $Absen->save();
+                    return redirect()->back()->with('success', 'Berhasil absen pada matakuliah ' . $jadwal->matakuliah->name);
+                } else {
+                    return redirect()->back()->with('danger', 'Jadwal tidak tersedia');
+                }
+            } else {
+                return redirect()->back()->with('danger', 'Waktu absen telah berakhir, absen berlaku sampai : ' . $expired);
             }
         } else {
             return redirect()->back()->with('danger', 'Qr code tak dikenali');
@@ -56,6 +62,7 @@ class AbsenController extends Controller
         ]);
         $Absen = new Absen();
         $Absen->id_jadwal = $request->id_jadwal;
+        $Absen->expired_date = $request->expired_date;
         $Absen->code_absen = hash::make($request->id_jadwal);
         $Absen->id_user = Auth::user()->id;
 

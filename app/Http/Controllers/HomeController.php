@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classes;
 use App\Models\Jadwal;
+use App\Models\MataKuliah;
+use App\Models\Ruangan;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,10 +29,15 @@ class HomeController extends Controller
     public function index()
     {
         $users = User::count();
+        $kelas = Classes::count();
+        $ruangan = Ruangan::count();
+        $matakuliah = MataKuliah::count();
 
         $widget = [
             'users' => $users,
-            //...
+            'matakuliah' => $matakuliah,
+            'kelas' => $kelas,
+            'ruangan' => $ruangan,
         ];
         $data = [
             'title' => 'Dashboard',

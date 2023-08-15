@@ -45,14 +45,24 @@
                                 <td>{{ $item->class->name }}</td>
                                 <td>{{ $item->user->full_name }}</td>
                                 <td style="width: 300px;">
-                                    <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
-                                        class="btn btn-warning"><i class="fa fa-pencil"></i> Update
-                                    </a>
-                                    <a href="#" data-toggle="modal" data-target="#delete-{{ $item->id }}"
-                                        class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
-                                    </a>
-                                    @include('pages.jadwal.components.modal_edit')
-                                    @include('pages.jadwal.components.modal_delete')
+                                    @if (Auth::user()->role == 'dosen')
+                                        <a href="{{ url('/jadwal/show', Crypt::encryptString($item->id)) }}"
+                                            class="btn btn-info"><i class="fa fa-book"></i> Absen
+                                        </a>
+                                    @endif
+                                    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
+                                        <a href="{{ url('/jadwal/show', Crypt::encryptString($item->id)) }}"
+                                            class="btn btn-info"><i class="fa fa-book"></i> Absen
+                                        </a>
+                                        <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
+                                            class="btn btn-warning"><i class="fa fa-pencil"></i> Update
+                                        </a>
+                                        <a href="#" data-toggle="modal" data-target="#delete-{{ $item->id }}"
+                                            class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
+                                        </a>
+                                        @include('pages.jadwal.components.modal_edit')
+                                        @include('pages.jadwal.components.modal_delete')
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

@@ -11,7 +11,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="text-primary">{{ __('SIPETA') }}</h1>
+                                        <h1 class="text-primary">{{ __('QR ABSENSI') }}</h1>
                                         <P class="text-muted mb-3">Login untuk dapat mengakses berkas..</P>
                                     </div>
 
@@ -29,7 +29,7 @@
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="email"
+                                            <input type="text" class="form-control form-control-user" name="identity"
                                                 placeholder="{{ __('NIP') }}" value="{{ old('nip') }}" required
                                                 autofocus>
                                         </div>

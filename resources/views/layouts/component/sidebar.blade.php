@@ -65,33 +65,64 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
     @endif
+    @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'mahasiswa')
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        {{ __('Absensi') }}
-    </div>
-    @if (Auth::user()->role == 'dosen')
-        <!-- Nav Item - buat absen -->
-        <li class="nav-item {{ Nav::isRoute('absen') }}">
-            <a class="nav-link" href="{{ route('absen') }}">
-                <i class="fas fa-fw fa-qrcode"></i>
-                <span>{{ __('Buat Absen') }}</span>
+        @if (Auth::user()->role == 'dosen')
+            <div class="sidebar-heading">
+                {{ __('Jadwal') }}
+            </div>
+            <!-- Nav Item - Jadwal -->
+            <li class="nav-item {{ Nav::isRoute('jadwal') }}">
+                <a class="nav-link" href="{{ route('jadwal') }}">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>{{ __('Jadwal') }}</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+        @endif
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            {{ __('Absensi') }}
+        </div>
+
+        @if (Auth::user()->role == 'dosen')
+            <!-- Nav Item - buat absen -->
+            <li class="nav-item {{ Nav::isRoute('absen') }}">
+                <a class="nav-link" href="{{ route('absen') }}">
+                    <i class="fas fa-fw fa-qrcode"></i>
+                    <span>{{ __('Buat Absen') }}</span>
+                </a>
+            </li>
+        @endif
+        @if (Auth::user()->role == 'mahasiswa')
+            <!-- Nav Item - buat absen -->
+            <li class="nav-item {{ Nav::isRoute('scan') }}">
+                <a class="nav-link" href="{{ route('scan') }}">
+                    <i class="fas fa-fw fa-qrcode"></i>
+                    <span>{{ __('Absen') }}</span>
+                </a>
+            </li>
+        @endif
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+    @endif
+    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            {{ __('Users') }}
+        </div>
+
+        <!-- Nav Item - Profile -->
+        <li class="nav-item {{ Nav::isRoute('user.mahasiswa') }}">
+            <a class="nav-link" href="{{ route('user.mahasiswa') }}">
+                <i class="fas fa-fw fa-user"></i>
+                <span>{{ __('Mahasiswa') }}</span>
             </a>
         </li>
     @endif
-    @if (Auth::user()->role == 'mahasiswa')
-        <!-- Nav Item - buat absen -->
-        <li class="nav-item {{ Nav::isRoute('scan') }}">
-            <a class="nav-link" href="{{ route('scan') }}">
-                <i class="fas fa-fw fa-qrcode"></i>
-                <span>{{ __('Absen') }}</span>
-            </a>
-        </li>
-    @endif
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
     <!-- Heading -->
     <div class="sidebar-heading">
         {{ __('Settings') }}

@@ -12,19 +12,23 @@
                 <form action="{{ route('absen.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-header">
-                        <h5>{{ __('Tambah Data') }}</h5>
+                        <h5>{{ __('Buat Absen') }}</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
                             <label for="day">Pilih Jadwal</label>
                             <select class="form-control" name="id_jadwal">
                                 <option selected value="">--Pilih ruangan--</option>
-                                @foreach (App\Models\Jadwal::all() as $item)
+                                @foreach (App\Models\Jadwal::where('id_user', Auth::user()->id)->get() as $item)
                                     <option value="{{ $item->id }}">
                                         {{ $item->matakuliah->name . ' (' . $item->time_start . '-' . $item->time_end . ')' }}
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Waktu Kadaluarsa</label>
+                            <input type="datetime-local" class="form-control" name="expired_date">
                         </div>
                     </div>
                     <div class="card-footer">
@@ -56,20 +60,28 @@
                                         <strong>{{ $item->jadwal->matakuliah->name }}</strong><br>
                                         <small
                                             class="text-danger">{{ $item->jadwal->time_start . ' - ' . $item->jadwal->time_end }}</small>
+                                        <br>
+                                        <hr>
+                                        <small>Kadaluarsa :
+                                            <span class="text-danger">{{ $item->expired_date }}</span></small>
                                     </td>
                                     <td>
                                         {{ $item->user->full_name }}
                                     </td>
-                                    <td style="width: 300px;">
+                                    <td style="width: 200px;">
                                         <a href="#" data-toggle="modal" data-target="#qr-{{ $item->id }}"
-                                            class="btn btn-primary"><i class="fa fa-qrcode"> </i> Qr Code
+                                            class="btn btn-primary"><i class="fa fa-qrcode"> </i>
                                         </a>
-                                        <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
-                                            class="btn btn-warning"><i class="fa fa-pencil"></i> Update
+                                        <a href="#" data-toggle="modal" data-target="#show-{{ $item->id }}"
+                                            class="btn btn-info"><i class="fa fa-book"></i>
+                                        </a>
+                                        {{-- <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
+                                            class="btn btn-warning"><i class="fa fa-pencil"></i> --}}
                                         </a>
                                         <a href="#" data-toggle="modal" data-target="#delete-{{ $item->id }}"
-                                            class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
+                                            class="btn btn-danger"><i class="fa fa-trash"></i>
                                         </a>
+                                        @include('pages.absen.components.modal_show')
                                         @include('pages.absen.components.modal_edit')
                                         @include('pages.absen.components.modal_qr')
                                         @include('pages.absen.components.modal_delete')
