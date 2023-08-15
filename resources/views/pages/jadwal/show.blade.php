@@ -27,7 +27,7 @@
                         <th colspan="16">Pertemuan</th>
                     </tr>
                     <tr class="bg-light text-center">
-                        <th>1</th>
+                        <ssssssssxxxxxxxxxxxxxth>1</ssssssssxxxxxxxxxxxxxth>
                         <th>2</th>
                         <th>3</th>
                         <th>4</th>
