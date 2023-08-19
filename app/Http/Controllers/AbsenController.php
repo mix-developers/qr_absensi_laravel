@@ -63,6 +63,8 @@ class AbsenController extends Controller
         $Absen = new Absen();
         $Absen->id_jadwal = $request->id_jadwal;
         $Absen->expired_date = $request->expired_date;
+        $Absen->longitude = $request->longitude;
+        $Absen->latitude = $request->latitude;
         $Absen->code_absen = hash::make($request->id_jadwal);
         $Absen->id_user = Auth::user()->id;
 

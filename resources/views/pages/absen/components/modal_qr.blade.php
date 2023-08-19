@@ -10,6 +10,8 @@
                 </button>
             </div>
             <div class="modal-body text-center">
+
+
                 {!! QrCode::style('round')->size(400)->generate($item->code_absen) !!}<br>
 
             </div>

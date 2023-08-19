@@ -10,9 +10,7 @@
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
             <div class="row">
-                <div class="col-12 text-center">
-                    <div id="coordinates"></div>
-                </div>
+
                 {{-- {{ Crypt::encryptString('firman') }} --}}
                 <div class="col-md-4">
                     <div class="card shadow-sm">
@@ -22,6 +20,8 @@
                                 <h5>{{ __('Buat Absen') }}</h5>
                             </div>
                             <div class="card-body">
+                                <input type="text" id="latitude" name="latitude" required>
+                                <input type="text" id="longitude" name="longitude" required>
                                 <div class="form-group">
                                     <label for="day">Pilih Jadwal</label>
                                     <select class="form-control" name="id_jadwal">
@@ -126,7 +126,9 @@
 
             document.getElementById("coordinates").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
 
-            // Lakukan apa yang perlu dilakukan dengan koordinat (misalnya, simpan ke server)
+            // Isi nilai input dengan koordinat
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
         }
 
         function showError(error) {
