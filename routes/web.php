@@ -88,6 +88,7 @@ Route::group(['middleware' => ['dosen']], function () {
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');
     Route::put('/absen/update/{id}', [AbsenController::class, 'update'])->name('absen.update');
     Route::delete('/absen/destroy/{id}', [AbsenController::class, 'destroy'])->name('absen.destroy');
+    Route::get('/jadwal/exportAbsen/{id}', [JadwalController::class, 'exportAbsen'])->name('jadwal.exportAbsen');
 });
 Route::group(['middleware' => ['KetuaJurusan']], function () {
 });

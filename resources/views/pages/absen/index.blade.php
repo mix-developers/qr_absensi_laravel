@@ -5,11 +5,16 @@
         <div class="pcoded-content">
             <!-- Page Heading -->
             @include('layouts.backend.title')
-            <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1>
+            {{-- <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1> --}}
 
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
             <div class="row">
+                <div class="col-12 text-center">
+                    <button id="getLocationBtn">Dapatkan Lokasi Saya</button>
+                    <div id="coordinates"></div>
+                </div>
+                {{-- {{ Crypt::encryptString('firman') }} --}}
                 <div class="col-md-4">
                     <div class="card shadow-sm">
                         <form action="{{ route('absen.store') }}" method="POST" enctype="multipart/form-data">
@@ -102,3 +107,42 @@
         </div>
     </div>
 @endsection
+@push('js')
+    <script>
+        document.getElementById("getLocationBtn").addEventListener("click", getLocation);
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            document.getElementById("coordinates").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+
+            // You can send this data to your server using AJAX if needed
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    console.log("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    console.log("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
+@endpush

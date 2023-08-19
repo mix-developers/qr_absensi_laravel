@@ -28,7 +28,6 @@ class JadwalController extends Controller
         }
         $data = [
             'title' => 'Data Jadwa Kuliah',
-
             'jadwal' => $jadwal,
         ];
         return view('pages.jadwal.index', $data);

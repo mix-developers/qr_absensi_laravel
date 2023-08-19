@@ -5,7 +5,7 @@
         <div class="pcoded-content">
             @include('layouts.backend.title')
             <!-- Page Heading -->
-            <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1>
+            {{-- <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1> --}}
 
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
@@ -23,14 +23,14 @@
                     </div>
                     <table class="table table-bordered">
                         <thead>
-                            <tr class=" align-middle text-center bg-light">
+                            <tr class=" align-middle text-center ">
                                 <th rowspan="2">No</th>
                                 <th rowspan="2">Nama</th>
                                 <th rowspan="2">NPM</th>
                                 <th colspan="16">Pertemuan</th>
                             </tr>
-                            <tr class="bg-light text-center">
-                                <ssssssssxxxxxxxxxxxxxth>1</ssssssssxxxxxxxxxxxxxth>
+                            <tr class=" text-center">
+                                <th>1</th>
                                 <th>2</th>
                                 <th>3</th>
                                 <th>4</th>
