@@ -121,8 +121,8 @@
         }
 
         function showPosition(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
+            var latitude = position.coords.latitude.toFixed(3);
+            var longitude = position.coords.longitude.toFixed(3);
 
             document.getElementById("coordinates").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
 
@@ -145,6 +145,5 @@
                     break;
             }
         }
-    </script>
     </script>
 @endpush
