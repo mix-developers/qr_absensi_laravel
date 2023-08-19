@@ -14,7 +14,8 @@
                 {{-- {{ Crypt::encryptString('firman') }} --}}
                 <div class="col-md-4">
                     <div class="card shadow-sm">
-                        <form action="{{ route('absen.store') }}" method="POST" enctype="multipart/form-data">
+                        <form id="coordinateForm" action="{{ route('absen.store') }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="card-header">
                                 <h5>{{ __('Buat Absen') }}</h5>
@@ -112,6 +113,11 @@
             getLocation();
         });
 
+        // Tambahkan fungsi untuk menangani submit form
+        document.getElementById("coordinateForm").addEventListener("submit", function() {
+            getLocation();
+        });
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -124,7 +130,9 @@
             var latitude = position.coords.latitude.toFixed(3);
             var longitude = position.coords.longitude.toFixed(3);
 
-            document.getElementById("coordinates").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+            // Tampilkan koordinat
+            var coordinatesElement = document.getElementById("coordinates");
+            coordinatesElement.innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
 
             // Isi nilai input dengan koordinat
             document.getElementById("latitude").value = latitude;
