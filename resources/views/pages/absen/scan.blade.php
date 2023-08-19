@@ -91,7 +91,7 @@
 
                 // canvasElement.height = video.videoHeight;
                 // canvasElement.width = video.videoWidth;
-                canvasElement.height = 120;
+                canvasElement.height = 200;
                 canvasElement.width = 240;
                 canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
                 var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
