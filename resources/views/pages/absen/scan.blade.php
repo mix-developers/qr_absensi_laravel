@@ -1,42 +1,47 @@
-@extends('layouts.admin')
+@extends('layouts.backend.admin')
 
-@section('main-content')
-    <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1>
+@section('content')
+    <div class="pc-container">
+        <div class="pcoded-content">
+            @include('layouts.backend.title')
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">{{ __($title) }}</h1>
 
-    @include('layouts.component.alert')
-    @include('layouts.component.alert_validate')
-    <center>
+            @include('layouts.component.alert')
+            @include('layouts.component.alert_validate')
+            <center>
 
-        <div class="card" style="width: 500px;">
-            <div class="card-body text-center">
-                <form action="{{ url('/scan/createAbsen') }}" method="POST">
-                    @csrf
+                <div class="card" style="width: 500px;">
+                    <div class="card-body text-center">
+                        <form action="{{ url('/scan/createAbsen') }}" method="POST">
+                            @csrf
 
-                    <div class="form-group">
-                        <div id="loadingMessage">Tidak dapat mengakses kamera (Mohon untuk mengaktifkan
-                            pengaturan kamera)</div>
-                        <canvas id="canvas" hidden></canvas>
-                        <div id="output" hidden>
-                            <div id="outputMessage">Qr code tidak terdeteksi, harap perbaiki posisi paket</div>
-                            <div hidden><b>Data:</b> <span id="outputData"></span></div>
-                        </div>
+                            <div class="form-group">
+                                <div id="loadingMessage">Tidak dapat mengakses kamera (Mohon untuk mengaktifkan
+                                    pengaturan kamera)</div>
+                                <canvas id="canvas" hidden></canvas>
+                                <div id="output" hidden>
+                                    <div id="outputMessage">Qr code tidak terdeteksi, harap perbaiki posisi paket</div>
+                                    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                {{-- <label>Code Absen <span class="text-danger">*</span></label> --}}
+                                <input type="hidden" name="code" class="form-control" placeholder="Nomor Resi"
+                                    id="outputDatas" required>
+
+                                <button type="button" class="btn btn-secondary btn-lg mt-2" onClick="refreshPage()">
+                                    <i class="flaticon2-refresh"></i> Refresh
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg mt-2" disabled id="absen">
+                                    <i class="flaticon2-search"></i>Absen</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group text-center">
-                        {{-- <label>Code Absen <span class="text-danger">*</span></label> --}}
-                        <input type="hidden" name="code" class="form-control" placeholder="Nomor Resi" id="outputDatas"
-                            required>
-
-                        <button type="button" class="btn btn-secondary btn-lg mt-2" onClick="refreshPage()">
-                            <i class="flaticon2-refresh"></i> Refresh
-                        </button>
-                        <button type="submit" class="btn btn-primary btn-lg mt-2" disabled id="absen">
-                            <i class="flaticon2-search"></i>Absen</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </center>
         </div>
-    </center>
+    </div>
 @endsection
 @push('js')
     <script src="https://jastiphabibi.id/js/app.js" type="text/javascript"></script>
