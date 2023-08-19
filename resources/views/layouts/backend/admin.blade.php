@@ -188,7 +188,8 @@
     <script src="{{ asset('backand_theme') }}/assets/js/plugins/clipboard.min.js"></script>
     <script src="{{ asset('backand_theme') }}/assets/js/uikit.min.js"></script>
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="{{ asset('backand_theme') }}/assets/js/plugins/jquery.dataTables.min.js"></script>
     <script src="{{ asset('backand_theme') }}/assets/js/plugins/dataTables.bootstrap4.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -216,6 +217,11 @@
         // DataTable start
         $('.lara-dataTable').DataTable();
         // DataTable end
+        config = {
+            enableTime: true,
+            dateFormat: 'd-m-Y H:i',
+        }
+        flatpickr("input[type=datetime-local]", config);
     </script>
 
 

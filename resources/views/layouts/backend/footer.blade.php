@@ -20,11 +20,17 @@
 <script src="{{ asset('admin_theme') }}/assets/js/pages/form-select-custom.js"></script>
 
 @stack('js')
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // DataTable start
     $('.lara-dataTable').DataTable();
     // DataTable end
+    config = {
+        enableTime: true,
+        dateFormat: 'd-m-Y H:i',
+    }
+    flatpickr("input[type=datetime-local]", config);
 </script>
 
 
