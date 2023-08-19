@@ -11,7 +11,7 @@
             @include('layouts.component.alert_validate')
             <center>
 
-                <div class="card" style="width: 500px;">
+                <div class="card">
                     <div class="card-body text-center">
                         <form action="{{ url('/scan/createAbsen') }}" method="POST">
                             @csrf
