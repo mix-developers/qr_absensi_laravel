@@ -11,7 +11,6 @@
             @include('layouts.component.alert_validate')
             <div class="row">
                 <div class="col-12 text-center">
-                    <button id="getLocationBtn">Dapatkan Lokasi Saya</button>
                     <div id="coordinates"></div>
                 </div>
                 {{-- {{ Crypt::encryptString('firman') }} --}}
@@ -109,7 +108,9 @@
 @endsection
 @push('js')
     <script>
-        document.getElementById("getLocationBtn").addEventListener("click", getLocation);
+        document.addEventListener("DOMContentLoaded", function() {
+            getLocation();
+        });
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -125,7 +126,7 @@
 
             document.getElementById("coordinates").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
 
-            // You can send this data to your server using AJAX if needed
+            // Lakukan apa yang perlu dilakukan dengan koordinat (misalnya, simpan ke server)
         }
 
         function showError(error) {
@@ -144,5 +145,6 @@
                     break;
             }
         }
+    </script>
     </script>
 @endpush
