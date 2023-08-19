@@ -21,8 +21,8 @@
                                 <h5>{{ __('Buat Absen') }}</h5>
                             </div>
                             <div class="card-body">
-                                <input type="text" id="latitude" name="latitude" required>
-                                <input type="text" id="longitude" name="longitude" required>
+                                <input type="hidden" id="latitude" name="latitude">
+                                <input type="hidden" id="longitude" name="longitude">
                                 <div class="form-group">
                                     <label for="day">Pilih Jadwal</label>
                                     <select class="form-control" name="id_jadwal">
