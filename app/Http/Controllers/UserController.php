@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jadwal;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,24 @@ class UserController extends Controller
     {
         $data = [
             'title' => 'Data dosen',
-            'user' => User::where('role', 'dosen')->get(),
+            'user' => User::where('role', 'dosen')->orWhere('role', 'ketua_jurusan')->orderBy('role', 'DESC')->get(),
         ];
         return view('pages.user.dosen', $data);
+    }
+    public function show($id)
+    {
+        $user = User::find($id);
+        $data = [
+            'title' => 'Jadwal Kuliah ' . $user->name . $user->last_name,
+            'user' => $user,
+            'jadwal' => Jadwal::where('id_user', $id)->get(),
+        ];
+        return view('pages.user.show', $data);
+    }
+
+    public function store()
+    {
+
+        return view('pages.user.show');
     }
 }

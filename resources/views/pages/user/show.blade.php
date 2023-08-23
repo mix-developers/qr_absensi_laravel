@@ -9,20 +9,15 @@
 
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
-            <div class="my-3">
 
-                <a href="#" data-toggle="modal" data-target="#create" class="btn btn-primary"><i class="fa fa-plus"></i>
-                    Tambah
-                    Jadwal
-                </a>
-            </div>
             <div class="card shadow-sm">
                 <div class="card-header">
                     <h5>{{ $title }}</h5>
+
                 </div>
                 <div class="card-body">
                     <div class="my-3 text-right">
-                        <a href="{{ url('/jadwal/exportJadwalAll') }}" class="btn btn-primary" target="__blank"><i
+                        <a href="{{ url('/jadwal/exportJadwal', $user->id) }}" class="btn btn-primary" target="__blank"><i
                                 class="fa fa-print"></i>
                             Cetak Jadwal</a>
                     </div>
@@ -54,12 +49,10 @@
                                         <td>{{ $item->class->name }}</td>
                                         <td>{{ $item->user->full_name }}</td>
                                         <td style="width: 300px;">
-                                            @if (Auth::user()->role == 'dosen')
-                                                <a href="{{ url('/jadwal/show', Crypt::encryptString($item->id)) }}"
-                                                    class="btn btn-info"><i class="fa fa-book"></i> Absen
-                                                </a>
-                                            @endif
-                                            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
+                                            <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
+                                                class="btn btn-info"><i class="fa fa-book"></i> Absen
+                                            </a>
+                                            {{-- @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
                                                 <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
                                                     class="btn btn-info"><i class="fa fa-book"></i> Absen
                                                 </a>
@@ -73,7 +66,7 @@
                                                 </a>
                                                 @include('pages.jadwal.components.modal_edit')
                                                 @include('pages.jadwal.components.modal_delete')
-                                            @endif
+                                            @endif --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -84,5 +77,4 @@
             </div>
         </div>
     </div>
-    @include('pages.jadwal.components.modal_create')
 @endsection

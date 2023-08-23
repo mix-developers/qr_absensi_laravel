@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Laporan Absen</title>
+    <title>Laporan Absen {{ $jadwal->matakuliah->name }}</title>
     <meta http-equiv="Content-Type" content="charset=utf-8" />
     <link rel="stylesheet" href="{{ public_path('css') }}/pdf/bootstrap.min.css" media="all" />
     <style>
@@ -34,16 +34,30 @@
             </tr>
         </table>
         <hr style="border: 1px solid black;">
+        <table class="table-borderless mb-3">
+            <tr>
+                <td>Matakuliah</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->matakuliah->name }}</b></td>
+            </tr>
+            <tr>
+                <td>Dosen Pengampuh</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->user->name }}</b></td>
+            </tr>
+        </table>
         <table class="table table-bordered">
             <thead>
-                <thead>
-                    <tr class=" align-middle text-center bg-light">
+                <thead style="font-size: 14px;">
+                    <tr class=" align-middle text-center ">
                         <th rowspan="2">No</th>
-                        <th rowspan="2">Nama</th>
-                        <th rowspan="2">NPM</th>
+                        <th colspan="2">Mahasiswa</th>
+
                         <th colspan="16">Pertemuan</th>
                     </tr>
-                    <tr class="bg-light text-center">
+                    <tr class=" text-center">
+                        <th>NPM</th>
+                        <th>Nama</th>
                         <th>1</th>
                         <th>2</th>
                         <th>3</th>
@@ -66,12 +80,12 @@
             <tbody>
                 @forelse($data as $item)
                     @php
-                        $count = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user);
+                        $count = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $item->id);
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->user->name }}</td>
                         <td>{{ $item->user->identity }}</td>
+                        <td>{{ $item->user->name }}</td>
                         <td>{!! $count >= 1 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
                         <td>{!! $count >= 2 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
                         <td>{!! $count >= 3 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
@@ -96,7 +110,15 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-3 float-right text-center">
+            Merauke , {{ date('d F Y') }}<br>
+            Ketua Jurusan {{ App\Models\Configuration::Konfigurasi()->jurusan }}
+            <div style="margin-top:80px;">
+                <strong><u>{{ App\Models\Configuration::Konfigurasi()->kajur }}</u></strong><br>
+                {{ App\Models\Configuration::Konfigurasi()->nip }}
+            </div>
         </div>
+
     </main>
 
 </body>

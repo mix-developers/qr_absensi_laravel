@@ -26,13 +26,13 @@
             <label>Data Jadwal</label>
         </li>
         {{-- jadwal --}}
-        <li class="pc-item"><a href="{{ route('jadwal') }}" class="pc-link "><span class="pc-micon"><i
+        <li class="pc-item"><a href="{{ route('jadwal_admin') }}" class="pc-link "><span class="pc-micon"><i
                         data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
         </li>
     @endif
-    @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'mahasiswa')
+    @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'dosen' || Auth::user()->role == 'mahasiswa')
 
-        @if (Auth::user()->role == 'dosen')
+        @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
             <li class="pc-item pc-caption">
                 <label>Data Jadwal</label>
             </li>
@@ -44,7 +44,7 @@
         <li class="pc-item pc-caption">
             <label>Absensi</label>
         </li>
-        @if (Auth::user()->role == 'dosen')
+        @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
             {{-- buat absen --}}
             <li class="pc-item"><a href="{{ route('absen') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
@@ -63,7 +63,11 @@
         </li>
         {{-- user.mahasiswa --}}
         <li class="pc-item"><a href="{{ route('user.mahasiswa') }}" class="pc-link "><span class="pc-micon"><i
-                        data-feather="book"></i></span><span class="pc-mtext">{{ __('Mahasiswa') }}</span></a>
+                        data-feather="users"></i></span><span class="pc-mtext">{{ __('Mahasiswa') }}</span></a>
+        </li>
+        {{-- user.dosen --}}
+        <li class="pc-item"><a href="{{ route('user.dosen') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="users"></i></span><span class="pc-mtext">{{ __('Dosen') }}</span></a>
         </li>
     @endif
     <li class="pc-item pc-caption">
@@ -73,4 +77,10 @@
     <li class="pc-item"><a href="{{ route('profile') }}" class="pc-link "><span class="pc-micon"><i
                     data-feather="book"></i></span><span class="pc-mtext">{{ __('Profile') }}</span></a>
     </li>
+    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
+        {{-- konfigurasi --}}
+        <li class="pc-item"><a href="{{ route('konfigurasi') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="settings"></i></span><span class="pc-mtext">{{ __('Konfigurasi') }}</span></a>
+        </li>
+    @endif
 </ul>

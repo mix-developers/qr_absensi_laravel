@@ -32,7 +32,30 @@ class JadwalController extends Controller
         ];
         return view('pages.jadwal.index', $data);
     }
+    public function admin()
+    {
+
+        $jadwal = Jadwal::all();
+
+        $data = [
+            'title' => 'Data Jadwa Kuliah',
+            'jadwal' => $jadwal,
+        ];
+        return view('pages.jadwal.index', $data);
+    }
     public function show($id)
+    {
+        $ID = Crypt::decryptString($id);
+        // dd($id);
+        $jadwal = Jadwal::find($ID);
+        $data = [
+            'title' => 'Data Absen Kuliah',
+            'jadwal' => $jadwal,
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+        ];
+        return view('pages.jadwal.show', $data);
+    }
+    public function showAdmin($id)
     {
         $ID = Crypt::decryptString($id);
         // dd($id);
@@ -175,12 +198,36 @@ class JadwalController extends Controller
     }
     public function exportAbsen($id)
     {
+        $jadwal = Jadwal::find($id);
         $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
 
         $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_absen', [
             'data' => $data,
+            'jadwal' => $jadwal,
         ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
 
-        return $pdf->stream('Data Absen '  . date('d-m-Y') . '.pdf');
+        return $pdf->stream('Data Absen ' . $jadwal->matakuliah->name  . date('d-m-Y') . '.pdf');
+    }
+    public function exportJadwal($id_user)
+    {
+        $data = Jadwal::where('id_user', $id_user)->get();
+        $user = User::find($id_user);
+
+        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_user', [
+            'data' => $data,
+            'user' => $user,
+        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+
+        return $pdf->stream('Jadwal ' . $user->name  . date('d-m-Y') . '.pdf');
+    }
+    public function exportJadwalAll()
+    {
+        $data = Jadwal::all();
+
+        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal', [
+            'data' => $data,
+        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+
+        return $pdf->stream('Jadwal ' . '.pdf');
     }
 }
