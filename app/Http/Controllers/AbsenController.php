@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Absen;
 use App\Models\AbsenMahasiswa;
+use App\Models\AbsenMateri;
 use App\Models\Jadwal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -73,6 +74,44 @@ class AbsenController extends Controller
             return redirect()->back()->with('success', 'Berhasil membuat absen');
         } else {
             return redirect()->back()->with('danger', 'Gagal membuat absen');
+        }
+    }
+    public function storeMeteri(Request $request)
+    {
+        $request->validate([
+            'id_jadwal' => ['required'],
+            'id_absen' => ['required'],
+            'materi' => ['required'],
+        ]);
+        $materi = new AbsenMateri();
+        $materi->id_jadwal = $request->id_jadwal;
+        $materi->id_absen = $request->id_absen;
+        $materi->materi = $request->materi;
+        $materi->id_user = Auth::user()->id;
+
+        if ($materi->save()) {
+            return redirect()->back()->with('success', 'Berhasil menambah materi');
+        } else {
+            return redirect()->back()->with('danger', 'Gagal menambah materi');
+        }
+    }
+    public function updateMeteri(Request $request, $id)
+    {
+        $request->validate([
+            'id_jadwal' => ['required'],
+            'id_absen' => ['required'],
+            'materi' => ['required'],
+        ]);
+        $materi = AbsenMateri::find($id);
+
+        $materi->id_jadwal = $request->id_jadwal;
+        $materi->id_absen = $request->id_absen;
+        $materi->materi = $request->materi;
+
+        if ($materi->save()) {
+            return redirect()->back()->with('success', 'Berhasil mengubah materi');
+        } else {
+            return redirect()->back()->with('danger', 'Gagal mengubah materi');
         }
     }
     public function update(Request $request, $id)

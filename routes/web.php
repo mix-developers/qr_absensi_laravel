@@ -7,6 +7,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
+use App\Models\AbsenMateri;
 use App\Models\Configuration;
 use App\Models\MataKuliah;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +79,9 @@ Route::middleware(['dosen'])->group(function () {
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');
     Route::put('/absen/update/{id}', [AbsenController::class, 'update'])->name('absen.update');
     Route::delete('/absen/destroy/{id}', [AbsenController::class, 'destroy'])->name('absen.destroy');
+    //route materi pertemuan
+    Route::post('/materi/storeMateri', [Absen::class, 'storeMateri'])->name('materi.storeMateri');
+    Route::put('/materi/updateMateri/{id}', [Absen::class, 'updateMateri'])->name('materi.updateMateri');
     //route profile
     Route::get('/profile', 'ProfileController@index')->name('profile');
     Route::put('/profile', 'ProfileController@update')->name('profile.update');
