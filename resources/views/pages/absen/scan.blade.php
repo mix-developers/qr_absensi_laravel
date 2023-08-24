@@ -13,7 +13,7 @@
 
                 <div class="card">
                     <div class="card-body text-center">
-                        <form action="{{ url('/scan/createAbsen') }}" method="POST">
+                        <form action="{{ url('/mahasiswa/scan/createAbsen') }}" method="POST">
                             @csrf
 
                             <div class="form-group">

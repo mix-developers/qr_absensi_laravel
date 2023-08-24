@@ -12,7 +12,7 @@
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="text-primary">{{ __('QR ABSENSI') }}</h1>
-                                        <P class="text-muted mb-3">Login untuk dapat mengakses berkas..</P>
+                                        <P class="text-muted mb-3">Login untuk dapat mengakses absen..</P>
                                     </div>
 
                                     @if ($errors->any())

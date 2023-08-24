@@ -70,9 +70,17 @@ Route::prefix('mahasiswa')->middleware(['mahasiswa'])->group(function () {
 
 // Grouping routes for dosen middleware
 Route::middleware(['dosen'])->group(function () {
+    //route jadwal
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
     Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
-    Route::resource('absen', AbsenController::class);
+    //route absen
+    Route::get('/absen', [AbsenController::class, 'index'])->name('absen');
+    Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');
+    Route::put('/absen/update/{id}', [AbsenController::class, 'update'])->name('absen.update');
+    Route::delete('/absen/destroy/{id}', [AbsenController::class, 'destroy'])->name('absen.destroy');
+    //route profile
+    Route::get('/profile', 'ProfileController@index')->name('profile');
+    Route::put('/profile', 'ProfileController@update')->name('profile.update');
 });
 
 // Grouping routes for KetuaJurusan middleware

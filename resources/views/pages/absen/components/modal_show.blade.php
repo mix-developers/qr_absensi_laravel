@@ -18,7 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse(App\Models\AbsenMahasiswa::where('id_jadwal',$item->id_jadwal)->get() as $list)
+                        @forelse(App\Models\AbsenMahasiswa::where('id_absen',$item->id)->get() as $list)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><strong>{{ $list->user->name }}</strong><br>

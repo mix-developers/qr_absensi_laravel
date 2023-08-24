@@ -14,6 +14,7 @@
                     <div id="coordinates"></div>
                 </div> --}}
                 {{-- {{ Crypt::encryptString('firman') }} --}}
+                {{-- {{ date('Y-m-d H:i') }} --}}
                 <div class="col-md-4">
                     <div class="card shadow-sm">
                         <form id="coordinateForm" action="{{ route('absen.store') }}" method="POST"
@@ -89,9 +90,9 @@
                                                     data-target="#show-{{ $item->id }}" class="btn btn-info"><i
                                                         class="fa fa-book"></i>
                                                 </a>
-                                                {{-- <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
-                                            class="btn btn-warning"><i class="fa fa-pencil"></i> --}}
-                                                </a>
+                                                <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}"
+                                                    class="btn btn-success" target="_blank"><i
+                                                        class="fa fa-map-marker-alt"></i></a>
                                                 <a href="#" data-toggle="modal"
                                                     data-target="#delete-{{ $item->id }}" class="btn btn-danger"><i
                                                         class="fa fa-trash"></i>
