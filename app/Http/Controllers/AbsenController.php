@@ -21,6 +21,14 @@ class AbsenController extends Controller
         ];
         return view('pages.absen.index', $data);
     }
+    public function history()
+    {
+        $data = [
+            'title' => 'History Absen',
+            'history' => AbsenMahasiswa::where('id_user', Auth::user()->id)->get(),
+        ];
+        return view('pages.absen.history', $data);
+    }
     public function scan()
     {
         $data = [
@@ -32,25 +40,33 @@ class AbsenController extends Controller
     public function createAbsen(Request $request)
     {
         $code_bcript = $request->code;
+        $latitude = $request->latitude;
+        $longitude = $request->longitude;
         $absen = Absen::where('code_absen', $code_bcript)->first();
         $now = date('Y-m-d H:i'); // Format waktu diubah menjadi 'Y-m-d H:i'
 
         if ($absen != null) {
-            $expired = $absen->expired_date;
-            if ($now < $expired) {
-                $jadwal = Jadwal::find($absen->id_jadwal);
-                if ($jadwal != null) {
-                    $Absen = new AbsenMahasiswa();
-                    $Absen->id_jadwal = $jadwal->id;
-                    $Absen->id_absen = $absen->id;
-                    $Absen->id_user = Auth::user()->id;
-                    $Absen->save();
-                    return redirect()->back()->with('success', 'Berhasil absen pada matakuliah ' . $jadwal->matakuliah->name);
+            if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
+
+                $expired = $absen->expired_date;
+                if ($now < $expired) {
+                    $jadwal = Jadwal::find($absen->id_jadwal);
+                    if ($jadwal != null) {
+                        $Absen = new AbsenMahasiswa();
+                        $Absen->id_jadwal = $jadwal->id;
+                        $Absen->id_absen = $absen->id;
+                        $Absen->ip_public = file_get_contents('https://ipinfo.io/ip');
+                        $Absen->id_user = Auth::user()->id;
+                        $Absen->save();
+                        return redirect()->back()->with('success', 'Berhasil absen pada matakuliah ' . $jadwal->matakuliah->name);
+                    } else {
+                        return redirect()->back()->with('danger', 'Jadwal tidak tersedia');
+                    }
                 } else {
-                    return redirect()->back()->with('danger', 'Jadwal tidak tersedia');
+                    return redirect()->back()->with('danger', 'Waktu absen telah berakhir, absen berlaku sampai : ' . $expired);
                 }
             } else {
-                return redirect()->back()->with('danger', 'Waktu absen telah berakhir, absen berlaku sampai : ' . $expired);
+                return redirect()->back()->with('danger', 'Anda berada di luar area absen');
             }
         } else {
             return redirect()->back()->with('danger', 'Qr code tak dikenali');

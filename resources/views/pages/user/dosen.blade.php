@@ -58,7 +58,11 @@
                                             </a>
                                             <a href="{{ url('/user/show', $item->id) }}" class="btn btn-info"><i
                                                     class="fa fa-book"></i> Jadwal</a>
+                                            <a href="#" data-toggle="modal" data-target="#delete-{{ $item->id }}"
+                                                class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
+                                            </a>
                                             @include('pages.user.component.modal_edit')
+                                            @include('pages.user.component.modal_delete')
                                         </td>
                                     </tr>
                                 @endforeach

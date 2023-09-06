@@ -1,6 +1,6 @@
 <ul class="pc-navbar">
     <li class="pc-item pc-caption">
-        <label>{{ env('APP_NAME') }}</label>
+        <label>{{ config('app.name') }}</label>
     </li>
     {{-- @if (Auth::user()->role == 'super_admin') --}}
     <li class="pc-item"><a href="{{ url('/home') }}" class="pc-link "><span class="pc-micon"><i
@@ -30,9 +30,9 @@
                         data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
         </li>
     @endif
-    @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'dosen' || Auth::user()->role == 'mahasiswa')
+    @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan' || Auth::user()->role == 'mahasiswa')
 
-        @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
+        @if (Auth::user()->role == 'dosen')
             <li class="pc-item pc-caption">
                 <label>Data Jadwal</label>
             </li>
@@ -40,20 +40,45 @@
             <li class="pc-item"><a href="{{ route('jadwal') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
             </li>
+        @elseif(Auth::user()->role == 'ketua_jurusan')
+            <li class="pc-item pc-caption">
+                <label>Data Jadwal</label>
+            </li>
+            {{-- jadwal --}}
+            <li class="pc-item"><a href="{{ route('jadwal-jurusan') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
+            </li>
+        @elseif(Auth::user()->role == 'mahasiswa')
+            <li class="pc-item pc-caption">
+                <label>Data Jadwal</label>
+            </li>
+            {{-- jadwal --}}
+            <li class="pc-item"><a href="{{ route('jadwal_mahasiswa') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
+            </li>
         @endif
+
         <li class="pc-item pc-caption">
             <label>Absensi</label>
         </li>
-        @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
+        @if (Auth::user()->role == 'dosen')
             {{-- buat absen --}}
             <li class="pc-item"><a href="{{ route('absen') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
+            </li>
+        @elseif(Auth::user()->role == 'ketua_jurusan')
+            {{-- buat absen --}}
+            <li class="pc-item"><a href="{{ route('absen-jurusan') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
             </li>
         @endif
         @if (Auth::user()->role == 'mahasiswa')
             {{--  scan --}}
             <li class="pc-item"><a href="{{ route('scan') }}" class="pc-link "><span class="pc-micon"><i
-                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Scan Absen') }}</span></a>
+                            data-feather="target"></i></span><span class="pc-mtext">{{ __('Scan Absen') }}</span></a>
+            </li>
+            <li class="pc-item"><a href="{{ route('history') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('HIstory Absen') }}</span></a>
             </li>
         @endif
     @endif
@@ -68,6 +93,23 @@
         {{-- user.dosen --}}
         <li class="pc-item"><a href="{{ route('user.dosen') }}" class="pc-link "><span class="pc-micon"><i
                         data-feather="users"></i></span><span class="pc-mtext">{{ __('Dosen') }}</span></a>
+        </li>
+    @endif
+    @if (Auth::user()->role == 'ketua_jurusan')
+        <li class="pc-item pc-caption">
+            <label>Laporan</label>
+        </li>
+        {{-- laporan mahasiswa  --}}
+        <li class="pc-item"><a href="{{ route('report.mahasiswa') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan Mahasiswa') }}</span></a>
+        </li>
+        {{-- laporan dosen  --}}
+        <li class="pc-item"><a href="{{ route('report.dosen') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan dosen') }}</span></a>
+        </li>
+        {{-- laporan jadwal  --}}
+        <li class="pc-item"><a href="{{ route('report.jadwal') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan jadwal') }}</span></a>
         </li>
     @endif
     <li class="pc-item pc-caption">

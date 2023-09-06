@@ -5,6 +5,8 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\rerportController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
 use App\Models\AbsenMateri;
@@ -18,10 +20,10 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/profile', 'ProfileController@index')->name('profile');
+Route::put('/profile', 'ProfileController@update')->name('profile.update');
 // Grouping routes for admin middleware
 Route::middleware(['admin'])->group(function () {
-    Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::put('/profile', 'ProfileController@update')->name('profile.update');
     //route class
     Route::get('/class', [ClassController::class, 'index'])->name('class');
     Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
@@ -52,25 +54,30 @@ Route::middleware(['admin'])->group(function () {
     //route user
     Route::get('/user/mahasiswa', [UserController::class, 'mahasiswa'])->name('user.mahasiswa');
     Route::get('/user/dosen', [UserController::class, 'dosen'])->name('user.dosen');
-    Route::get('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
     Route::get('/user/show/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::delete('/user/destroy/{id}', [UserController::class, 'destroy'])->name('user.destroy');
     //konfigurasi 
     Route::get('/konfigurasi', [ConfigurationController::class, 'index'])->name('konfigurasi');
     Route::put('/konfigurasi/update/{id}', [ConfigurationController::class, 'update'])->name('konfigurasi.update');
-
-
     // Other routes for admin...
 });
 
 // Grouping routes for mahasiswa middleware
 Route::prefix('mahasiswa')->middleware(['mahasiswa'])->group(function () {
+    //route jadwal
+    Route::get('/jadwal_mahasiswa', [JadwalController::class, 'jadwal_mahasiswa'])->name('jadwal_mahasiswa');
+    Route::get('/jadwal/show_jadwal_mahasiswa/{id}', [JadwalController::class, 'show_jadwal_mahasiswa'])->name('jadwal.show_jadwal_mahasiswa');
+    //route absen 
     Route::get('/scan', [AbsenController::class, 'scan'])->name('scan');
+    Route::get('/history', [AbsenController::class, 'history'])->name('history');
     Route::post('/scan/createAbsen', [AbsenController::class, 'createAbsen'])->name('createAbsen');
     Route::post('/scan/absenMahasiswa', [AbsenController::class, 'absenMahasiswa'])->name('scan.absenMahasiswa');
 });
 
 // Grouping routes for dosen middleware
-Route::middleware(['dosen'])->group(function () {
+Route::prefix('dosen')->middleware(['dosen'])->group(function () {
     //route jadwal
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
     Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
@@ -82,12 +89,23 @@ Route::middleware(['dosen'])->group(function () {
     //route materi pertemuan
     Route::post('/materi/storeMateri', [Absen::class, 'storeMateri'])->name('materi.storeMateri');
     Route::put('/materi/updateMateri/{id}', [Absen::class, 'updateMateri'])->name('materi.updateMateri');
-    //route profile
-    Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::put('/profile', 'ProfileController@update')->name('profile.update');
 });
 
 // Grouping routes for KetuaJurusan middleware
-Route::middleware(['KetuaJurusan'])->group(function () {
-    // Define routes for KetuaJurusan...
+Route::prefix('jurusan')->middleware(['KetuaJurusan'])->group(function () {
+    //route report
+    Route::get('/report/mahasiswa', [ReportController::class, 'mahasiswa'])->name('report.mahasiswa');
+    Route::get('/report/dosen', [ReportController::class, 'dosen'])->name('report.dosen');
+    Route::get('/report/jadwal', [ReportController::class, 'jadwal'])->name('report.jadwal');
+    //route jadwal
+    Route::get('/jadwal-jurusan', [JadwalController::class, 'index'])->name('jadwal-jurusan');
+    Route::get('/jadwal-jurusan/show/{id}', [JadwalController::class, 'show'])->name('jadwal-jurusan.show');
+    //route absen
+    Route::get('/absen-jurusan', [AbsenController::class, 'index'])->name('absen-jurusan');
+    Route::post('/absen-jurusan/store', [AbsenController::class, 'store'])->name('absen-jurusan.store');
+    Route::put('/absen-jurusan/update/{id}', [AbsenController::class, 'update'])->name('absen-jurusan.update');
+    Route::delete('/absen-jurusan/destroy/{id}', [AbsenController::class, 'destroy'])->name('absen-jurusan.destroy');
+    //route materi pertemuan
+    Route::post('/materi/storeMateri-jurusan', [Absen::class, 'storeMateri'])->name('materi.storeMateri-jurusan');
+    Route::put('/materi/updateMateri-jurusan/{id}', [Absen::class, 'updateMateri'])->name('materi.updateMateri-jurusan');
 });

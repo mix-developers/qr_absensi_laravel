@@ -32,6 +32,15 @@ class JadwalController extends Controller
         ];
         return view('pages.jadwal.index', $data);
     }
+    public function jadwal_mahasiswa()
+    {
+        $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)->get();
+        $data = [
+            'title' => ' Jadwal Kuliah',
+            'jadwal' => $jadwal,
+        ];
+        return view('pages.jadwal.mahasiswa', $data);
+    }
     public function admin()
     {
 
@@ -44,6 +53,18 @@ class JadwalController extends Controller
         return view('pages.jadwal.index', $data);
     }
     public function show($id)
+    {
+        $ID = Crypt::decryptString($id);
+        // dd($id);
+        $jadwal = Jadwal::find($ID);
+        $data = [
+            'title' => 'Data Absen Kuliah',
+            'jadwal' => $jadwal,
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+        ];
+        return view('pages.jadwal.show', $data);
+    }
+    public function show_jadwal_mahasiswa($id)
     {
         $ID = Crypt::decryptString($id);
         // dd($id);

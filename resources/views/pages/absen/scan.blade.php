@@ -10,12 +10,16 @@
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
             <center>
-
                 <div class="card">
                     <div class="card-body text-center">
                         <form action="{{ url('/mahasiswa/scan/createAbsen') }}" method="POST">
                             @csrf
-
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+                            <div class="my-3">
+                                {{ file_get_contents('https://ipinfo.io/ip') }}
+                            </div>
+                            <div id="coordinates" class="mb-3" style="display: block;"></div>
                             <div class="form-group">
                                 <div id="loadingMessage">Tidak dapat mengakses kamera (Mohon untuk mengaktifkan
                                     pengaturan kamera)</div>
@@ -114,6 +118,55 @@
                 }
             }
             requestAnimationFrame(tick);
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            getLocation();
+        });
+
+        // Tambahkan fungsi untuk menangani submit form
+        // document.getElementById("coordinateForm").addEventListener("submit", function() {
+        //     getLocation();
+        // });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude.toFixed(4);
+            var longitude = position.coords.longitude.toFixed(4);
+
+            // Tampilkan koordinat
+            var coordinatesElement = document.getElementById("coordinates");
+            coordinatesElement.innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+
+            // Isi nilai input dengan koordinat
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+            initMap(latitude, longitude);
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    console.log("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    console.log("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    console.log("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    console.log("An unknown error occurred.");
+                    break;
+            }
         }
     </script>
 @endpush

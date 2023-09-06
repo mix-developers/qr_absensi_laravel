@@ -3,7 +3,7 @@
 
 <head>
     <meta name="google-site-verification" content="6jNOWiRzFMuuJFQ6w3XHfUgQddz7uIVo3w4A9TnsI7s" />
-    <title>{{ $title . ' | ' . env('APP_NAME') }}</title>
+    <title>{{ $title . ' | ' . config('app.name') }}</title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 11]>
@@ -102,8 +102,8 @@
                         style="max-width:150px;">
                     <img src="{{ asset('backand_theme') }}/assets/images/logo-sm.svg" alt=""
                         class="logo logo-sm"> --}}
-                    <h2 class="text-white logo logo-lg">{{ env('APP_NAME') }}</h2>
-                    <h2 class="text-white logo logo-sm">{{ env('APP_NAME') }}</h2>
+                    <h2 class="text-white logo logo-lg">{{ config('app.name') }}</h2>
+                    <h2 class="text-white logo logo-sm">{{ config('app.name') }}</h2>
                 </a>
             </div>
             <div class="navbar-content">

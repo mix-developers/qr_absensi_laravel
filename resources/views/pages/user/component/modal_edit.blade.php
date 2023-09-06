@@ -8,13 +8,14 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user.update', $item->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="card-body">
 
                     <div class="form-group">
                         <label for="day">Pilih Jabatan</label>
-                        <select class="form-control" name="id_matakuliah">
+                        <select class="form-control" name="role">
                             <option value="dosen" {{ $item->role == 'dosen' ? 'selected' : '' }}>Dosen</option>
                             <option value="ketua_jurusan" {{ $item->role == 'ketua_jurusan' ? 'selected' : '' }}>Ketua
                                 Jurusan</option>

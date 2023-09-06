@@ -13,7 +13,7 @@
 
                     <div class="form-group">
                         <label for="day">Pilih Jabatan</label>
-                        <select class="form-control" name="id_matakuliah">
+                        <select class="form-control" name="role">
                             <option selected value="dosen">Dosen</option>
                             <option value="ketua_jurusan">Ketua Jurusan</option>
                         </select>
