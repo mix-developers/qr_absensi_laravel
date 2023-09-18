@@ -13,7 +13,7 @@
 
                 <a href="#" data-toggle="modal" data-target="#create" class="btn btn-primary"><i class="fa fa-plus"></i>
                     Tambah
-                    Jadwal
+                    Dosen
                 </a>
             </div>
             <div class="card shadow-sm">
@@ -52,14 +52,14 @@
                                             ? '<span class="badge badge-light-primary">Dosen</span>'
                                             : '<span class="badge badge-light-warning">Ketua Jurusan</span>' !!}</td>
                                         <td>
-                                            <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
-                                                class="btn btn-warning"><i class="fa fa-pencil"></i>
-                                                Update
-                                            </a>
                                             <a href="{{ url('/user/show', $item->id) }}" class="btn btn-info"><i
                                                     class="fa fa-book"></i> Jadwal</a>
+                                            <a href="#" data-toggle="modal" data-target="#edit-{{ $item->id }}"
+                                                class="btn btn-light-warning"><i class="fa fa-edit"></i>
+
+                                            </a>
                                             <a href="#" data-toggle="modal" data-target="#delete-{{ $item->id }}"
-                                                class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
+                                                class="btn btn-light-danger"><i class="fa fa-trash"></i>
                                             </a>
                                             @include('pages.user.component.modal_edit')
                                             @include('pages.user.component.modal_delete')
@@ -73,5 +73,5 @@
             </div>
         </div>
     </div>
-    @include('pages.user.component.modal_create')
+    @include('pages.user.component.modal_create_dosen')
 @endsection

@@ -12,12 +12,12 @@
             <center>
                 <div class="card">
                     <div class="card-body text-center">
-                        <form action="{{ url('/mahasiswa/scan/createAbsen') }}" method="POST">
+                        <form action="{{ url('scan/createAbsen') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" id="latitude" name="latitude">
                             <input type="hidden" id="longitude" name="longitude">
                             <div class="my-3">
-                                {{ file_get_contents('https://ipinfo.io/ip') }}
+                                {{-- {{ file_get_contents('https://ipinfo.io/ip') }} --}}
                             </div>
                             <div id="coordinates" class="mb-3" style="display: block;"></div>
                             <div class="form-group">
@@ -28,6 +28,11 @@
                                     <div id="outputMessage">Qr code tidak terdeteksi, harap perbaiki posisi kamera</div>
                                     <div hidden><b>Data:</b> <span id="outputData"></span></div>
                                 </div>
+                            </div>
+                            <div class="form-group my-2 container">
+                                <label>Bukti Foto<span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" name="foto" accept="image/*" capture="camera"
+                                    required>
                             </div>
                             <div class="form-group text-center">
                                 {{-- <label>Code Absen <span class="text-danger">*</span></label> --}}
@@ -48,8 +53,8 @@
     </div>
 @endsection
 @push('js')
-    <script src="https://jastiphabibi.id/js/app.js" type="text/javascript"></script>
-    <script src="https://jastiphabibi.id/js/jsQR.js" type="text/javascript"></script>
+    <script src="{{ asset('/') }}js/app-qr.js" type="text/javascript"></script>
+    <script src="{{ asset('/') }}js/jsQR.js" type="text/javascript"></script>
     <script>
         function refreshPage() {
             window.location.reload();
@@ -139,8 +144,8 @@
         }
 
         function showPosition(position) {
-            var latitude = position.coords.latitude.toFixed(4);
-            var longitude = position.coords.longitude.toFixed(4);
+            var latitude = position.coords.latitude.toFixed(3);
+            var longitude = position.coords.longitude.toFixed(3);
 
             // Tampilkan koordinat
             var coordinatesElement = document.getElementById("coordinates");

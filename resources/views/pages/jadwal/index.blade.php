@@ -9,7 +9,7 @@
 
             @include('layouts.component.alert')
             @include('layouts.component.alert_validate')
-            @if (Auth::user()->role == 'admin')
+            @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
                 <div class="my-3">
                     <a href="#" data-toggle="modal" data-target="#create" class="btn btn-primary"><i
                             class="fa fa-plus"></i>
@@ -64,12 +64,12 @@
                                                     class="btn btn-info"><i class="fa fa-book"></i> Absen
                                                 </a>
                                                 <a href="#" data-toggle="modal"
-                                                    data-target="#edit-{{ $item->id }}" class="btn btn-warning"><i
-                                                        class="fa fa-pencil"></i> Update
+                                                    data-target="#edit-{{ $item->id }}"
+                                                    class="btn btn-light-warning"><i class="fa fa-edit"></i>
                                                 </a>
                                                 <a href="#" data-toggle="modal"
-                                                    data-target="#delete-{{ $item->id }}" class="btn btn-danger"><i
-                                                        class="fa fa-trash"></i> Hapus
+                                                    data-target="#delete-{{ $item->id }}"
+                                                    class="btn btn-light-danger"><i class="fa fa-trash"></i>
                                                 </a>
                                                 @include('pages.jadwal.components.modal_edit')
                                                 @include('pages.jadwal.components.modal_delete')
@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    @if (Auth::user()->role == 'admin')
+    @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
         @include('pages.jadwal.components.modal_create')
     @endif
 @endsection

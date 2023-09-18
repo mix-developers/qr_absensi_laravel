@@ -18,15 +18,6 @@
             </div>
         @endif
 
-        @if (session('status'))
-            <div class="alert alert-success border-left-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
-        @if (session('danger'))
-            <div class="alert alert-danger border-left-danger" role="alert">
-                {{ session('danger') }}
-            </div>
-        @endif
+
     </div>
 </div>

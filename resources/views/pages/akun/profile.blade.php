@@ -27,49 +27,32 @@
             @endif
 
             <div class="row">
-
                 <div class="col-lg-4 order-lg-2">
-
-                    <div class="card shadow mb-4">
-                        <div class="card-profile-image mt-4">
-                            <figure class="rounded-circle avatar avatar font-weight-bold"
-                                style="font-size: 60px; height: 180px; width: 180px;"
-                                data-initial="{{ isset(Auth::user()->name[0]) ? Auth::user()->name[0] : Auth::guard('pegawai')->user()->nama[0] }}">
-                            </figure>
+                    <div class="card shadow ">
+                        <div class="card-profile-image text-center mt-4">
+                            <img src="{{ asset('img/user.png') }}"style="height:100px;">
                         </div>
                         <div class="card-body">
 
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="text-center">
-                                        <h5 class="font-weight-bold">
-                                            {{ isset(Auth::user()->fullName) ? Auth::user()->fullName : Auth::guard('pegawai')->user()->nama }}
-                                        </h5>
-                                        <p>Administrator</p>
+                                        <h5>{{ Auth::user()->name . isset(Auth::user()->last_name) }}</h5>
+                                        <p>
+                                            @if (Auth::user()->role == 'super_admin' || Auth::user()->role == 'admin')
+                                                Administrator
+                                            @elseif(Auth::user()->role == 'dosen')
+                                                Dosen
+                                            @elseif(Auth::user()->role == 'mahasiswa')
+                                                Mahasiswa
+                                            @elseif(Auth::user()->role == 'ketua_jurusan')
+                                                Jurusan
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="card-profile-stats">
-                                        <span class="heading">22</span>
-                                        <span class="description">Friends</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-profile-stats">
-                                        <span class="heading">10</span>
-                                        <span class="description">Photos</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card-profile-stats">
-                                        <span class="heading">89</span>
-                                        <span class="description">Comments</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -171,5 +154,4 @@
             </div>
         </div>
     </div>
-
 @endsection

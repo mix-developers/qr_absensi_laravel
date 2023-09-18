@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\Admin::class,
         'dosen' => \App\Http\Middleware\Dosen::class,
+        'role' => \App\Http\Middleware\CekUserLogin::class,
         'mahasiswa' => \App\Http\Middleware\Mahasiswa::class,
         'KetuaJurusan' => \App\Http\Middleware\KetuaJurusan::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

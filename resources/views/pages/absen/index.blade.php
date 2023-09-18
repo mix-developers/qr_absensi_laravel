@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label for="day">Pilih Jadwal</label>
                                     <select class="form-control" name="id_jadwal">
-                                        <option selected value="">--Pilih ruangan--</option>
+                                        <option selected value="">--Pilih Jadwal--</option>
                                         @foreach (App\Models\Jadwal::where('id_user', Auth::user()->id)->get() as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->matakuliah->name . ' (' . $item->time_start . '-' . $item->time_end . ')' }}
@@ -47,6 +47,10 @@
                                 <div class="form-group">
                                     <label>Waktu Kadaluarsa</label>
                                     <input type="datetime-local" class="form-control" name="expired_date">
+                                </div>
+                                <div class="form-group">
+                                    <label>Materi Kuliah</label>
+                                    <textarea class="form-control" name="materi"></textarea>
                                 </div>
                             </div>
                             <div class="card-footer">
@@ -63,7 +67,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped mb-0 lara-dataTable">
+                                <table class="table table-bordered  mb-0 lara-dataTable">
                                     <thead class="bg-light">
                                         <tr>
                                             <th>#</th>
@@ -74,7 +78,8 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($absen as $item)
-                                            <tr>
+                                            <tr
+                                                class="{{ $item->expired_date <= date('Y-m-d H:i') ? 'bg-light-danger' : '' }}">
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
                                                     <strong>{{ $item->jadwal->matakuliah->name }}</strong><br>
@@ -86,7 +91,10 @@
                                                         <span class="text-danger">{{ $item->expired_date }}</span></small>
                                                 </td>
                                                 <td>
-                                                    {{ $item->user->full_name }}
+                                                    <strong class="text-primary">{{ $item->user->full_name }}</strong><br>
+                                                    Materi Kuliah :<br>
+                                                    <small
+                                                        class="text-muted">{{ App\Models\AbsenMateri::getMateriAbsen($item->id) }}</small>
                                                 </td>
                                                 <td style="width: 200px;">
                                                     <a href="#" data-toggle="modal"
@@ -145,8 +153,8 @@
         }
 
         function showPosition(position) {
-            var latitude = position.coords.latitude.toFixed(4);
-            var longitude = position.coords.longitude.toFixed(4);
+            var latitude = position.coords.latitude.toFixed(3);
+            var longitude = position.coords.longitude.toFixed(3);
 
             // Tampilkan koordinat
             var coordinatesElement = document.getElementById("coordinates");

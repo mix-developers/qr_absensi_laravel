@@ -17,4 +17,16 @@ class Absen extends Model
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
+    public function AbsenMateri()
+    {
+        return $this->hasMany(AbsenMateri::class, 'id_absen');
+    }
+    public function AbsenFoto()
+    {
+        return $this->hasMany(AbsenFoto::class, 'id_absen');
+    }
+    public function AbsenConfirm()
+    {
+        return $this->hasMany(AbsenConfirm::class, 'id_absen');
+    }
 }

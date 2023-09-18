@@ -31,49 +31,37 @@
                                     <th colspan="16">Pertemuan</th>
                                 </tr>
                                 <tr class=" text-center">
-                                    <th>1</th>
-                                    <th>2</th>
-                                    <th>3</th>
-                                    <th>4</th>
-                                    <th>5</th>
-                                    <th>6</th>
-                                    <th>7</th>
-                                    <th>8</th>
-                                    <th>9</th>
-                                    <th>10</th>
-                                    <th>11</th>
-                                    <th>12</th>
-                                    <th>13</th>
-                                    <th>14</th>
-                                    <th>15</th>
-                                    <th>16</th>
+                                    @for ($i = 1; $i <= 16; $i++)
+                                        <th>{{ $i }}</th>
+                                    @endfor
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($jadwal_mahasiswa as $item)
                                     @php
-                                        $count = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
+                                        $absen = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
+                                        $count = $absen->count();
+                                        
+                                        if ($absen != null && $count > 0) {
+                                            $materi = App\Models\AbsenMateri::getMateriAbsen($absen->first()->id_absen);
+                                        } else {
+                                            $materi = null;
+                                        }
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $item->user->name }}</td>
                                         <td>{{ $item->user->identity }}</td>
-                                        <td>{!! $count >= 1 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 2 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 3 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 4 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 5 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 6 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 7 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 8 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 9 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 10 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 11 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 12 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 13 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 14 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 15 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
-                                        <td>{!! $count >= 16 ? '<i class="fa fa-check text-success"></i>' : '-' !!}</td>
+                                        @for ($i = 1; $i <= 16; $i++)
+                                            <td>{!! $count >= $i
+                                                ? '<i class="fa fa-sm fa-check text-success"></i><br><a href="#" data-toggle="modal" data-target="#materi-' .
+                                                    $i .
+                                                    '"><i class="fa fa-comments fa-xs"></i></a>'
+                                                : '-' !!}</td>
+                                            @if ($absen != null)
+                                                @include('pages.jadwal.components.modal_materi')
+                                            @endif
+                                        @endfor
                                     </tr>
                                 @empty
                                     <tr>

@@ -40,29 +40,36 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'role' => ['required'],
-            'name' => ['required'],
-            'last_name' => ['required'],
-            'identity' => ['required'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'tempat_lahir' => ['required'],
-            'tanggal_lahir' => ['required', 'date'],
-        ]);
-        $user = new User();
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->role = $request->role;
-        $user->email = $request->email;
-        $user->identity = $request->identity;
-        $user->tempat_lahir = $request->tempat_lahir;
-        $user->tanggal_lahir = $request->tanggal_lahir;
-        $user->password = Hash::make('password');
+        try {
+            $request->validate([
+                'role' => ['required'],
+                'name' => ['required'],
+                'identity' => ['required'],
+                'email' => ['required', 'email', 'unique:users,email'],
+                'tempat_lahir' => ['required'],
+                'tanggal_lahir' => ['required', 'date'],
+            ]);
 
-        if ($user->save()) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('danger', 'Gagal menambahkan data');
+            $user = new User();
+            $user->name = $request->name;
+            $user->last_name = $request->last_name;
+            $user->role = $request->role;
+            $user->email = $request->email;
+            $user->angkatan = $request->angkatan;
+            $user->identity = $request->identity;
+            $user->tempat_lahir = $request->tempat_lahir;
+            $user->tanggal_lahir = $request->tanggal_lahir;
+
+            // Set password default ke "password" dan hash
+            $user->password = bcrypt('password');
+
+            if ($user->save()) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            } else {
+                return redirect()->back()->with('danger', 'Gagal menambahkan data');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -76,43 +83,53 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => ['required'],
-            'last_name' => ['required'],
-            'identity' => ['required'],
-            'email' => ['required'],
-        ]);
-        $user = User::findOrFail($id);
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->role = $request->role;
-        $user->email = $request->email;
-        $user->identity = $request->identity;
-        $user->tempat_lahir = $request->tempat_lahir;
-        $user->tanggal_lahir = $request->tanggal_lahir;
+        try {
+            $request->validate([
+                'name' => ['required'],
+                'identity' => ['required'],
+                'email' => ['required'],
+            ]);
+            $user = User::findOrFail($id);
+            $user->name = $request->name;
+            $user->last_name = $request->last_name;
+            if ($request->input('role') != null || $request->input('role' != '')) {
+                $user->role = $request->role;
+            }
+            $user->email = $request->email;
+            $user->angkatan = $request->angkatan;
+            $user->identity = $request->identity;
+            $user->tempat_lahir = $request->tempat_lahir;
+            $user->tanggal_lahir = $request->tanggal_lahir;
 
-        if ($user->save()) {
-            return redirect()->back()->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect()->back()->with('danger', 'Gagal mengubah data');
+            if ($user->save()) {
+                return redirect()->back()->with('success', 'Berhasil mengubah data');
+            } else {
+                return redirect()->back()->with('danger', 'Gagal mengubah data');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
     public function destroy($id)
     {
-        $user = User::find($id);
-        $absen = Absen::where('id_user', $id)->get();
-        $jadwal = Jadwal::where('id_user', $id)->get();
-        $materi = AbsenMateri::where('id_user', $id)->get();
-        if ($absen->count() != 0) {
-            $absen->delete();
+        try {
+            $user = User::findOrFail($id);
+
+            // Hapus absen yang terkait dengan user
+            Absen::where('id_user', $id)->delete();
+
+            // Hapus jadwal yang terkait dengan user
+            Jadwal::where('id_user', $id)->delete();
+
+            // Hapus materi yang terkait dengan user
+            AbsenMateri::where('id_user', $id)->delete();
+
+            // Hapus user
+            $user->delete();
+
+            return redirect()->back()->with('success', 'Berhasil menghapus data');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        if ($jadwal->count() != 0) {
-            $jadwal->delete();
-        }
-        if ($materi->count() != 0) {
-            $materi->delete();
-        }
-        $user->delete();
-        return redirect()->back()->with('success', 'Berhasil menghapus data');
     }
 }

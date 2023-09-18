@@ -37,6 +37,6 @@ class AbsenMahasiswa extends Model
     // Count the number of attendances for a specific user and jadwal
     public static function getCountAbsen($id_user, $id_jadwal)
     {
-        return self::with(['user', 'jadwal'])->where('id_user', $id_user)->where('id_jadwal', $id_jadwal)->count();
+        return self::with(['user', 'jadwal'])->where('id_user', $id_user)->where('id_jadwal', $id_jadwal);
     }
 }

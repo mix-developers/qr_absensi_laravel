@@ -83,8 +83,12 @@ class ClassController extends Controller
      */
     public function destroy($id)
     {
-        $class = Classes::find($id);
-        $class->delete();
-        return redirect()->back()->with('success', 'Berhasil menghapus data');
+        try {
+            $class = Classes::find($id);
+            $class->delete();
+            return redirect()->back()->with('success', 'Berhasil menghapus data');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

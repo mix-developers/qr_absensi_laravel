@@ -58,12 +58,12 @@
                                             <td>{{ $item->sks }}</td>
                                             <td style="width: 300px;">
                                                 <a href="#" data-toggle="modal"
-                                                    data-target="#edit-{{ $item->id }}" class="btn btn-warning"><i
-                                                        class="fa fa-pencil"></i> Update
+                                                    data-target="#edit-{{ $item->id }}" class="btn btn-light-warning"><i
+                                                        class="fa fa-edit"></i>
                                                 </a>
                                                 <a href="#" data-toggle="modal"
-                                                    data-target="#delete-{{ $item->id }}" class="btn btn-danger"><i
-                                                        class="fa fa-trash"></i> Hapus
+                                                    data-target="#delete-{{ $item->id }}"
+                                                    class="btn btn-light-danger"><i class="fa fa-trash"></i>
                                                 </a>
                                                 @include('pages.matakuliah.components.modal_edit')
                                                 @include('pages.matakuliah.components.modal_delete')

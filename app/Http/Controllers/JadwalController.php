@@ -21,13 +21,13 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role == 'dosen') {
+        if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan') {
             $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
         } else {
             $jadwal = Jadwal::all();
         }
         $data = [
-            'title' => 'Data Jadwa Kuliah',
+            'title' => 'Data Jadwal Kuliah',
             'jadwal' => $jadwal,
         ];
         return view('pages.jadwal.index', $data);
@@ -119,51 +119,56 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'id_user' => ['required'],
-            'id_ruangan' => ['required'],
-            'id_class' => ['required'],
-            'id_matakuliah' => ['required'],
-            'time_start' => ['required'],
-            'time_end' => ['required'],
-            'day' => ['required'],
-        ]);
-        $Jadwal = new Jadwal();
-        $Jadwal->id_user = $request->id_user;
-        $Jadwal->id_ruangan = $request->id_ruangan;
-        $Jadwal->id_class = $request->id_class;
-        $Jadwal->id_matakuliah = $request->id_matakuliah;
-        $Jadwal->time_start = $request->time_start;
-        $Jadwal->time_end = $request->time_end;
-        $Jadwal->day = $request->day;
+        try {
+            $request->validate([
+                'id_user' => ['required'],
+                'id_ruangan' => ['required'],
+                'id_class' => ['required'],
+                'id_matakuliah' => ['required'],
+                'time_start' => ['required'],
+                'time_end' => ['required'],
+                'day' => ['required'],
+            ]);
+            $Jadwal = new Jadwal();
+            $Jadwal->id_user = $request->id_user;
+            $Jadwal->id_ruangan = $request->id_ruangan;
+            $Jadwal->id_class = $request->id_class;
+            $Jadwal->id_matakuliah = $request->id_matakuliah;
+            $Jadwal->time_start = $request->time_start;
+            $Jadwal->time_end = $request->time_end;
+            $Jadwal->day = $request->day;
 
 
-        if ($Jadwal->save()) {
-            return redirect()->back()->with('success', 'Berhasil menambahkan data');
-        } else {
-            return redirect()->back()->with('danger', 'Gagal menambahkan data');
+            if ($Jadwal->save()) {
+                return redirect()->back()->with('success', 'Berhasil menambahkan data');
+            } else {
+                return redirect()->back()->with('danger', 'Gagal menambahkan data');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
     public function storeInput(Request $request)
     {
-        $request->validate([
-            'id_jadwal' => ['required'],
-            'id_user' => ['required'],
+        try {
+            $request->validate([
+                'id_jadwal' => ['required'],
+                'id_user' => ['required'],
+            ]);
+            $JadwalMahasiswa = new JadwalMahasiswa();
+            $JadwalMahasiswa->id_jadwal = $request->id_jadwal;
+            $JadwalMahasiswa->id_user = $request->id_user;
 
-        ]);
-        $JadwalMahasiswa = new JadwalMahasiswa();
-        $JadwalMahasiswa->id_jadwal = $request->id_jadwal;
-        $JadwalMahasiswa->id_user = $request->id_user;
-
-        if ($JadwalMahasiswa->save()) {
-            return redirect()->back()->with('success', 'Berhasil membuat jadwal');
-        } else {
-            return redirect()->back()->with('danger', 'Gagal membuat jadwal');
+            if ($JadwalMahasiswa->save()) {
+                return redirect()->back()->with('success', 'Berhasil membuat jadwal');
+            } else {
+                return redirect()->back()->with('danger', 'Gagal membuat jadwal');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -173,29 +178,33 @@ class JadwalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'id_user' => ['required'],
-            'id_ruangan' => ['required'],
-            'id_class' => ['required'],
-            'id_matakuliah' => ['required'],
-            'time_start' => ['required'],
-            'time_end' => ['required'],
-            'day' => ['required'],
-        ]);
-        $Jadwal = Jadwal::findOrFail($id);
-        $Jadwal->id_user = $request->id_user;
-        $Jadwal->id_ruangan = $request->id_ruangan;
-        $Jadwal->id_class = $request->id_class;
-        $Jadwal->id_matakuliah = $request->id_matakuliah;
-        $Jadwal->time_start = $request->time_start;
-        $Jadwal->time_end = $request->time_end;
-        $Jadwal->day = $request->day;
+        try {
+            $request->validate([
+                'id_user' => ['required'],
+                'id_ruangan' => ['required'],
+                'id_class' => ['required'],
+                'id_matakuliah' => ['required'],
+                'time_start' => ['required'],
+                'time_end' => ['required'],
+                'day' => ['required'],
+            ]);
+            $Jadwal = Jadwal::findOrFail($id);
+            $Jadwal->id_user = $request->id_user;
+            $Jadwal->id_ruangan = $request->id_ruangan;
+            $Jadwal->id_class = $request->id_class;
+            $Jadwal->id_matakuliah = $request->id_matakuliah;
+            $Jadwal->time_start = $request->time_start;
+            $Jadwal->time_end = $request->time_end;
+            $Jadwal->day = $request->day;
 
 
-        if ($Jadwal->save()) {
-            return redirect()->back()->with('success', 'Berhasil mengubah data');
-        } else {
-            return redirect()->back()->with('danger', 'Gagal mengubah data');
+            if ($Jadwal->save()) {
+                return redirect()->back()->with('success', 'Berhasil mengubah data');
+            } else {
+                return redirect()->back()->with('danger', 'Gagal mengubah data');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -207,9 +216,13 @@ class JadwalController extends Controller
      */
     public function destroy($id)
     {
-        $Jadwal = Jadwal::find($id);
-        $Jadwal->delete();
-        return redirect()->back()->with('success', 'Berhasil menghapus data');
+        try {
+            $Jadwal = Jadwal::find($id);
+            $Jadwal->delete();
+            return redirect()->back()->with('success', 'Berhasil menghapus data');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
     public function destroyInput($id)
     {

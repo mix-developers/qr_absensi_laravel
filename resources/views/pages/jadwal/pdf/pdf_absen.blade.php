@@ -58,50 +58,25 @@
                     <tr class=" text-center">
                         <th>NPM</th>
                         <th>Nama</th>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                        <th>7</th>
-                        <th>8</th>
-                        <th>9</th>
-                        <th>10</th>
-                        <th>11</th>
-                        <th>12</th>
-                        <th>13</th>
-                        <th>14</th>
-                        <th>15</th>
-                        <th>16</th>
+                        @for ($i = 1; $i <= 16; $i++)
+                            <th>{{ $i }}</th>
+                        @endfor
                     </tr>
                 </thead>
             </thead>
             <tbody>
                 @forelse($data as $item)
                     @php
-                        $count = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $item->id);
+                        $absen = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
+                        $count = $absen->count();
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->user->identity }}</td>
                         <td>{{ $item->user->name }}</td>
-                        <td>{!! $count >= 1 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 2 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 3 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 4 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 5 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 6 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 7 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 8 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 9 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 10 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 11 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 12 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 13 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 14 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 15 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
-                        <td>{!! $count >= 16 ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
+                        @for ($i = 1; $i <= 16; $i++)
+                            <td>{!! $count >= $i ? '<span style="font-family: DejaVu Sans, sans-serif; font-size:16px;">✔</span>' : '-' !!}</td>
+                        @endfor
                     </tr>
                 @empty
                     <tr>

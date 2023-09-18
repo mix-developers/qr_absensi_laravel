@@ -26,7 +26,7 @@
             <label>Data Jadwal</label>
         </li>
         {{-- jadwal --}}
-        <li class="pc-item"><a href="{{ route('jadwal_admin') }}" class="pc-link "><span class="pc-micon"><i
+        <li class="pc-item"><a href="{{ route('jadwal') }}" class="pc-link "><span class="pc-micon"><i
                         data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
         </li>
     @endif
@@ -45,7 +45,7 @@
                 <label>Data Jadwal</label>
             </li>
             {{-- jadwal --}}
-            <li class="pc-item"><a href="{{ route('jadwal-jurusan') }}" class="pc-link "><span class="pc-micon"><i
+            <li class="pc-item"><a href="{{ route('jadwal') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
             </li>
         @elseif(Auth::user()->role == 'mahasiswa')
@@ -53,7 +53,7 @@
                 <label>Data Jadwal</label>
             </li>
             {{-- jadwal --}}
-            <li class="pc-item"><a href="{{ route('jadwal_mahasiswa') }}" class="pc-link "><span class="pc-micon"><i
+            <li class="pc-item"><a href="{{ route('jadwal') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Jadwal') }}</span></a>
             </li>
         @endif
@@ -68,7 +68,7 @@
             </li>
         @elseif(Auth::user()->role == 'ketua_jurusan')
             {{-- buat absen --}}
-            <li class="pc-item"><a href="{{ route('absen-jurusan') }}" class="pc-link "><span class="pc-micon"><i
+            <li class="pc-item"><a href="{{ route('absen') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
             </li>
         @endif
@@ -95,7 +95,7 @@
                         data-feather="users"></i></span><span class="pc-mtext">{{ __('Dosen') }}</span></a>
         </li>
     @endif
-    @if (Auth::user()->role == 'ketua_jurusan')
+    @if (Auth::user()->role == 'ketua_jurusan' || Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
         <li class="pc-item pc-caption">
             <label>Laporan</label>
         </li>
@@ -108,9 +108,9 @@
                         data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan dosen') }}</span></a>
         </li>
         {{-- laporan jadwal  --}}
-        <li class="pc-item"><a href="{{ route('report.jadwal') }}" class="pc-link "><span class="pc-micon"><i
+        {{-- <li class="pc-item"><a href="{{ route('report.jadwal') }}" class="pc-link "><span class="pc-micon"><i
                         data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan jadwal') }}</span></a>
-        </li>
+        </li> --}}
     @endif
     <li class="pc-item pc-caption">
         <label>Pengaturan</label>

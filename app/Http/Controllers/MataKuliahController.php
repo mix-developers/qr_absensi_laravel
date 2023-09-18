@@ -91,8 +91,12 @@ class MataKuliahController extends Controller
      */
     public function destroy($id)
     {
-        $MataKuliah = MataKuliah::find($id);
-        $MataKuliah->delete();
-        return redirect()->back()->with('success', 'Berhasil menghapus data');
+        try {
+            $MataKuliah = MataKuliah::find($id);
+            $MataKuliah->delete();
+            return redirect()->back()->with('success', 'Berhasil menghapus data');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }
