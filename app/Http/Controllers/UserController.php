@@ -44,7 +44,7 @@ class UserController extends Controller
             $request->validate([
                 'role' => ['required'],
                 'name' => ['required'],
-                'identity' => ['required'],
+                'identity' => ['required', 'unique:users,identity'],
                 'email' => ['required', 'email', 'unique:users,email'],
                 'tempat_lahir' => ['required'],
                 'tanggal_lahir' => ['required', 'date'],
@@ -61,7 +61,7 @@ class UserController extends Controller
             $user->tanggal_lahir = $request->tanggal_lahir;
 
             // Set password default ke "password" dan hash
-            $user->password = bcrypt('password');
+            $user->password = Hash::make('password');
 
             if ($user->save()) {
                 return redirect()->back()->with('success', 'Berhasil menambahkan data');

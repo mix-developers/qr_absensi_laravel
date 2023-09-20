@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AbsenController extends Controller
@@ -44,7 +45,9 @@ class AbsenController extends Controller
     {
         $data = [
             'title' => 'Konfirmasi Absen',
-            'absen_mahasiswa' => AbsenMahasiswa::findOrFail($id)
+            'absen' => Absen::find($id),
+            'absen_confirm' => AbsenConfirm::where('id_absen', $id)->first(),
+            'absen_mahasiswa' => AbsenMahasiswa::where('id_absen', $id)->get(),
         ];
         return view('pages.absen.confirm', $data);
     }
@@ -54,8 +57,11 @@ class AbsenController extends Controller
         $confirm->id_user = Auth::user()->id;
         $confirm->id_absen = $request->id_absen;
 
-        $absen_foto = AbsenFoto::where('id_absen', $request->id_absen);
-        $absen_foto->delete();
+        $absen_foto = AbsenFoto::where('id_absen', $request->id_absen)->get();
+        foreach ($absen_foto as $foto) {
+            $foto->delete();
+            Storage::delete($foto->foto);
+        }
 
         if ($confirm->save()) {
             return redirect()->back()->with('success', 'Absen Berhasil di konfirmasi');

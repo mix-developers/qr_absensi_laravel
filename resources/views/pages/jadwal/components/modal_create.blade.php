@@ -16,7 +16,7 @@
                             <option value="Senin" selected>Senin</option>
                             <option value="Selasa">Selasa</option>
                             <option value="Rabu">Rabu</option>
-                            <option value="Kamus">Kamus</option>
+                            <option value="kamis">Kamis</option>
                             <option value="Jum'at">Jum'at</option>
                             <option value="Sabtu">Sabtu</option>
                         </select>
@@ -64,7 +64,7 @@
                         <label for="day">Pilih Dosen</label>
                         <select class="form-control" name="id_user">
                             <option selected value="">--Pilih Dosen--</option>
-                            @foreach (App\Models\User::all() as $item)
+                            @foreach (App\Models\User::where('role', 'dosen')->get() as $item)
                                 <option value="{{ $item->id }}">{{ $item->full_name }}</option>
                             @endforeach
                         </select>

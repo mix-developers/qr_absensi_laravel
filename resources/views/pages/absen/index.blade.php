@@ -105,9 +105,16 @@
                                                         data-target="#show-{{ $item->id }}" class="btn btn-info "><i
                                                             class="fa fa-xs fa-book"></i>
                                                     </a>
-                                                    <a href="https://www.google.com/maps?q={{ $item->latitude }},{{ $item->longitude }}"
-                                                        class="btn btn-success " target="_blank"><i
-                                                            class="fa fa-xs fa-map-marker-alt"></i></a>
+                                                    @php
+                                                        $absenConfirm = App\Models\AbsenConfirm::where('id_absen', $item->id)->count();
+                                                    @endphp
+
+                                                    <form method="GET" action="{{ route('absen.confirm', $item->id) }}"
+                                                        style="display: inline;">
+                                                        <button type="submit" class="btn btn-success">
+                                                            <i class="fa fa-xs fa-check"></i>
+                                                        </button>
+                                                    </form>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#delete-{{ $item->id }}"
                                                         class="btn btn-danger "><i class="fa fa-xs fa-trash"></i>

@@ -56,7 +56,7 @@
                                         <td>{{ $item->user->full_name }}</td>
                                         <td style="width: 300px;">
                                             @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
-                                                <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jurusan/jadwal-jurusan/show', Crypt::encryptString($item->id)) }}"
+                                                <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jadwal/show', Crypt::encryptString($item->id)) }}"
                                                     class="btn btn-info"><i class="fa fa-book"></i> Absen
                                                 </a>
                                             @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')

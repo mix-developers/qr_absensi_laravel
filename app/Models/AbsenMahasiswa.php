@@ -39,4 +39,9 @@ class AbsenMahasiswa extends Model
     {
         return self::with(['user', 'jadwal'])->where('id_user', $id_user)->where('id_jadwal', $id_jadwal);
     }
+    public static function checkAbsen($id_absen, $id_user)
+    {
+        $exist = self::with(['user', 'jadwal'])->where('id_absen', $id_absen)->where('id_user', $id_user);
+        return $exist;
+    }
 }

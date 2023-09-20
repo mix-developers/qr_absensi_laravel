@@ -22,45 +22,74 @@
                             Cetak</a>
                     </div>
                     <div class="table-responsive">
+                        @php
+                            //master absen
+                            $absen_exist = App\Models\Absen::where('id_jadwal', $jadwal->id);
+                            $total_absen = $absen_exist->count();
+                            
+                        @endphp
                         <table class="table table-bordered">
                             <thead>
                                 <tr class=" align-middle text-center ">
                                     <th rowspan="2">No</th>
-                                    <th rowspan="2">Nama</th>
-                                    <th rowspan="2">NPM</th>
+                                    <th colspan="2">Mahasiswa</th>
                                     <th colspan="16">Pertemuan</th>
                                 </tr>
                                 <tr class=" text-center">
-                                    @for ($i = 1; $i <= 16; $i++)
-                                        <th>{{ $i }}</th>
+                                    <th>NPM</th>
+                                    <th>Nama</th>
+                                    @foreach ($absen_exist->get() as $list)
+                                        <th>{{ $loop->iteration }}<br>
+                                            <a href="#" data-toggle="modal"
+                                                data-target="#materi-{{ $list->id }}                                                                                                                                                                                                                                                                                                                                  "><i
+                                                    class="fa fa-comments fa-xs"></i>
+                                            </a>
+                                            @include('pages.jadwal.components.modal_materi')
+                                        </th>
+                                    @endforeach
+                                    @for ($i = $total_absen + 1; $i <= 16; $i++)
+                                        <th>{{ $i }}<br>
+                                            <a href="#"><i class="fa fa-comments fa-xs text-muted"></i>
+                                            </a>
+                                        </th>
                                     @endfor
                                 </tr>
                             </thead>
                             <tbody>
+
                                 @forelse($jadwal_mahasiswa as $item)
                                     @php
+                                        //absen mahasiswa
                                         $absen = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
-                                        $count = $absen->count();
                                         
-                                        if ($absen != null && $count > 0) {
-                                            $materi = App\Models\AbsenMateri::getMateriAbsen($absen->first()->id_absen);
-                                        } else {
-                                            $materi = null;
-                                        }
+                                        //check pada konfirmasi absen
+                                        $count = $absen
+                                            ->whereIn('id_absen', function ($query) {
+                                                $query->select('id_absen')->from('absen_confirms');
+                                            })
+                                            ->count();
+                                        
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->user->name }}</td>
                                         <td>{{ $item->user->identity }}</td>
-                                        @for ($i = 1; $i <= 16; $i++)
-                                            <td>{!! $count >= $i
-                                                ? '<i class="fa fa-sm fa-check text-success"></i><br><a href="#" data-toggle="modal" data-target="#materi-' .
-                                                    $i .
-                                                    '"><i class="fa fa-comments fa-xs"></i></a>'
-                                                : '-' !!}</td>
-                                            @if ($absen != null)
-                                                @include('pages.jadwal.components.modal_materi')
-                                            @endif
+                                        <td>{{ $item->user->name }}</td>
+                                        @foreach ($absen_exist->get() as $list)
+                                            @php
+                                                $exist_user = App\Models\AbsenMahasiswa::checkAbsen($list->id, $item->id_user)->count();
+                                            @endphp
+                                            <td>
+                                                @if ($exist_user > 0)
+                                                    <i class="fa fa-sm fa-check text-success"></i><br>
+                                                @else
+                                                    <span class="text-danger">&times;</span>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                        @for ($i = 1; $i <= 16 - $total_absen; $i++)
+                                            <td>
+                                                -
+                                            </td>
                                         @endfor
                                     </tr>
                                 @empty
