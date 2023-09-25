@@ -238,40 +238,52 @@ class JadwalController extends Controller
     }
     public function exportAbsen($id)
     {
-        $jadwal = Jadwal::find($id);
-        $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
-        $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
-        $materi = AbsenMateri::where('id_jadwal', $id)->get();
+        try {
+            $jadwal = Jadwal::find($id);
+            $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
+            $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
+            $materi = AbsenMateri::where('id_jadwal', $id)->get();
 
-        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_absen', [
-            'data' => $data,
-            'jadwal' => $jadwal,
-            'ijin' => $ijin,
-            'materi' => $materi
-        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+            $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_absen', [
+                'data' => $data,
+                'jadwal' => $jadwal,
+                'ijin' => $ijin,
+                'materi' => $materi
+            ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
 
-        return $pdf->stream('Data Absen ' . $jadwal->matakuliah->name  . date('d-m-Y') . '.pdf');
+            return $pdf->stream('Data Absen ' . $jadwal->matakuliah->name  . date('d-m-Y') . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
     public function exportJadwal($id_user)
     {
-        $data = Jadwal::where('id_user', $id_user)->get();
-        $user = User::find($id_user);
+        try {
+            $data = Jadwal::where('id_user', $id_user)->get();
+            $user = User::find($id_user);
 
-        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_user', [
-            'data' => $data,
-            'user' => $user,
-        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+            $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_user', [
+                'data' => $data,
+                'user' => $user,
+            ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
 
-        return $pdf->stream('Jadwal ' . $user->name  . date('d-m-Y') . '.pdf');
+            return $pdf->stream('Jadwal ' . $user->name  . date('d-m-Y') . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
     public function exportJadwalAll()
     {
-        $data = Jadwal::all();
+        try {
+            $data = Jadwal::all();
 
-        $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal', [
-            'data' => $data,
-        ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+            $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal', [
+                'data' => $data,
+            ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
 
-        return $pdf->stream('Jadwal ' . '.pdf');
+            return $pdf->stream('Jadwal ' . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

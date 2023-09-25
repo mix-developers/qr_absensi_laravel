@@ -8,6 +8,9 @@ use App\Models\AbsenFoto;
 use App\Models\AbsenMahasiswa;
 use App\Models\AbsenMateri;
 use App\Models\Jadwal;
+use App\Models\JadwalMahasiswa;
+use App\Models\Notifikasi;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -53,20 +56,39 @@ class AbsenController extends Controller
     }
     public function storeConfirm(Request $request)
     {
-        $confirm = new AbsenConfirm();
-        $confirm->id_user = Auth::user()->id;
-        $confirm->id_absen = $request->id_absen;
+        try {
+            $confirm = new AbsenConfirm();
+            $confirm->id_user = Auth::user()->id;
+            $confirm->id_absen = $request->id_absen;
 
-        $absen_foto = AbsenFoto::where('id_absen', $request->id_absen)->get();
-        foreach ($absen_foto as $foto) {
-            $foto->delete();
-            Storage::delete($foto->foto);
-        }
+            $absen = Absen::find($request->id_absen);
+            $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->get();
 
-        if ($confirm->save()) {
-            return redirect()->back()->with('success', 'Absen Berhasil di konfirmasi');
-        } else {
-            return redirect()->back()->with('danger', 'Absen gagal di konfirmasi');
+            foreach ($jadwal as $item) {
+                $cek_absen = AbsenMahasiswa::where('id_user', $item->id_user);
+                if ($cek_absen) {
+                    $notif = new Notifikasi();
+                    $notif->id_user = $item->id_user;
+                    $notif->content = 'Anda tidak melakukan absen pada matakuliah ' . $item->jadwal->matakuliah->name;
+                    $notif->type = 'danger';
+                    $notif->url = '/jadwal';
+                    $notif->save();
+                }
+            }
+
+            $absen_foto = AbsenFoto::where('id_absen', $request->id_absen)->get();
+            foreach ($absen_foto as $foto) {
+                $foto->delete();
+                Storage::delete($foto->foto);
+            }
+
+            if ($confirm->save()) {
+                return redirect()->back()->with('success', 'Absen Berhasil di konfirmasi');
+            } else {
+                return redirect()->back()->with('danger', 'Absen gagal di konfirmasi');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
     public function createAbsen(Request $request)
