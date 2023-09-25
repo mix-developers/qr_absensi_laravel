@@ -1,5 +1,6 @@
 <ul class="pc-navbar">
     <li class="pc-item pc-caption">
+
         <label>{{ config('app.name') }}</label>
     </li>
     {{-- @if (Auth::user()->role == 'super_admin') --}}
@@ -62,6 +63,10 @@
             <label>Absensi</label>
         </li>
         @if (Auth::user()->role == 'dosen')
+            {{--  pengajuan ijin --}}
+            <li class="pc-item"><a href="{{ route('ijin') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Pengajuan Ijin') }}</span></a>
+            </li>
             {{-- buat absen --}}
             <li class="pc-item"><a href="{{ route('absen') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
@@ -73,6 +78,11 @@
             </li>
         @endif
         @if (Auth::user()->role == 'mahasiswa')
+            {{--  pengajuan ijin --}}
+            <li class="pc-item"><a href="{{ route('ijin') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="target"></i></span><span
+                        class="pc-mtext">{{ __('Pengajuan Ijin') }}</span></a>
+            </li>
             {{--  scan --}}
             <li class="pc-item"><a href="{{ route('scan') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="target"></i></span><span class="pc-mtext">{{ __('Scan Absen') }}</span></a>
@@ -101,7 +111,8 @@
         </li>
         {{-- laporan mahasiswa  --}}
         <li class="pc-item"><a href="{{ route('report.mahasiswa') }}" class="pc-link "><span class="pc-micon"><i
-                        data-feather="book"></i></span><span class="pc-mtext">{{ __('Laporan Mahasiswa') }}</span></a>
+                        data-feather="book"></i></span><span
+                    class="pc-mtext">{{ __('Laporan Mahasiswa') }}</span></a>
         </li>
         {{-- laporan dosen  --}}
         <li class="pc-item"><a href="{{ route('report.dosen') }}" class="pc-link "><span class="pc-micon"><i

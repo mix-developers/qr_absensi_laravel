@@ -3,8 +3,11 @@
 use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IjinController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MataKuliahController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\rerportController;
 use App\Http\Controllers\RuanganController;
@@ -18,6 +21,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
+    Route::put('/read_notif/{id}', [NotifikasiController::class, 'read'])->name('read_notif');
+    Route::put('/read_all/{id}', [NotifikasiController::class, 'read_all'])->name('read_all');
+    Route::get('/notifikasi', [HomeController::class, 'notifikasi'])->name('notifikasi');
+
     Route::get('/', 'HomeController@index')->name('index');
     Route::get('/home', 'HomeController@index')->name('home');
     //semua route
@@ -74,6 +81,9 @@ Route::middleware(['role:admin,super_admin'])->group(function () {
 
 // Grouping routes for mahasiswa middleware
 Route::middleware(['role:mahasiswa'])->group(function () {
+    //route pengajuan ijin 
+
+    Route::post('/ijin/store', [IjinController::class, 'store'])->name('ijin.store');
     //route absen 
     Route::get('/scan', [AbsenController::class, 'scan'])->name('scan');
     Route::get('/history', [AbsenController::class, 'history'])->name('history');
@@ -82,6 +92,11 @@ Route::middleware(['role:mahasiswa'])->group(function () {
 });
 
 // Grouping routes for dosen middleware
+Route::middleware(['role:dosen,mahasiswa'])->group(function () {
+    Route::get('/ijin', [IjinController::class, 'index'])->name('ijin');
+    Route::put('/ijin/terima/{id}', [IjinController::class, 'terima'])->name('ijin.terima');
+    Route::put('/ijin/tolak/{id}', [IjinController::class, 'tolak'])->name('ijin.tolak');
+});
 Route::middleware(['role:dosen,ketua_jurusan'])->group(function () {
     Route::get('/absen', [AbsenController::class, 'index'])->name('absen');
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');

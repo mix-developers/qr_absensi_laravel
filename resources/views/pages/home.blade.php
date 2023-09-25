@@ -117,6 +117,7 @@
                                             <th>SKS</th>
                                             <th>Kelas</th>
                                             <th>Dosen</th>
+                                            <th>Pertemuan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,12 +125,15 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->day }}</td>
-                                                <td>{{ $item->time_start . ' - ' . $item->time_end }}</td>
+                                                <td>{{ $item->time_start . ' - ' . $item->time_end }} WIT</td>
                                                 <td>{{ $item->ruangan->name }}</td>
                                                 <td>{{ $item->matakuliah->name }}</td>
                                                 <td>{{ $item->matakuliah->sks }}</td>
                                                 <td>{{ $item->class->name }}</td>
                                                 <td>{{ $item->user->full_name }}</td>
+                                                <td>
+                                                    {!! App\Models\Absen::getPertemuan($item->id) !!}
+                                                </td>
 
                                             </tr>
                                         @endforeach

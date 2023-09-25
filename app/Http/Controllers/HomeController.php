@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Classes;
 use App\Models\Jadwal;
 use App\Models\MataKuliah;
+use App\Models\Notifikasi;
 use App\Models\Ruangan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -54,5 +56,13 @@ class HomeController extends Controller
         ];
 
         return view('pages.akun.index', $data);
+    }
+    public function notifikasi()
+    {
+        $data = [
+            'title' => 'Semua notifikasi',
+            'notifikasi' => Notifikasi::where('id_user', Auth::user()->id)->orderBy('id', 'DESC')->get(),
+        ];
+        return view('pages.notifikasi', $data);
     }
 }

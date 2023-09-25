@@ -17,6 +17,9 @@
                     </a>
                 </div>
             @endif
+            @php
+                $user = Auth::user()->role;
+            @endphp
             <div class="card shadow-sm">
                 <div class="card-header">
                     <h5>{{ $title }}</h5>
@@ -40,41 +43,57 @@
                                     <th>SKS</th>
                                     <th>Kelas</th>
                                     <th>Dosen</th>
-                                    <th>Aksi</th>
+                                    <th>Pertemuan</th>
+                                    @if ($user != 'mahasiswa')
+                                        <th>Aksi</th>
+                                    @endif
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($jadwal as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->day }}</td>
-                                        <td>{{ $item->time_start . ' - ' . $item->time_end }}</td>
-                                        <td>{{ $item->ruangan->name }}</td>
-                                        <td>{{ $item->matakuliah->name }}</td>
-                                        <td>{{ $item->matakuliah->sks }}</td>
-                                        <td>{{ $item->class->name }}</td>
-                                        <td>{{ $item->user->full_name }}</td>
-                                        <td style="width: 300px;">
-                                            @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
-                                                <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jadwal/show', Crypt::encryptString($item->id)) }}"
-                                                    class="btn btn-info"><i class="fa fa-book"></i> Absen
-                                                </a>
-                                            @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
-                                                <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
-                                                    class="btn btn-info"><i class="fa fa-book"></i> Absen
-                                                </a>
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#edit-{{ $item->id }}"
-                                                    class="btn btn-light-warning"><i class="fa fa-edit"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#delete-{{ $item->id }}"
-                                                    class="btn btn-light-danger"><i class="fa fa-trash"></i>
-                                                </a>
-                                                @include('pages.jadwal.components.modal_edit')
-                                                @include('pages.jadwal.components.modal_delete')
-                                            @endif
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->day : $item->day }}</td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->time_start : $item->time_start }} -
+                                            {{ $user == 'mahasiswa' ? $item->jadwal->time_end : $item->time_end }} WIT
                                         </td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->ruangan->name : $item->ruangan->name }}
+                                        </td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->matakuliah->name : $item->matakuliah->name }}
+                                        </td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->matakuliah->sks : $item->matakuliah->sks }}
+                                        </td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->class->name : $item->class->name }}
+                                        </td>
+                                        <td>{{ $user == 'mahasiswa' ? $item->jadwal->user->full_name : $item->user->full_name }}
+                                        </td>
+                                        <td>
+                                            {!! App\Models\Absen::getPertemuan($item->id) !!}
+                                        </td>
+                                        @if ($user != 'mahasiswa')
+                                            <td style="width: 300px;">
+                                                @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
+                                                    <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jadwal/show', Crypt::encryptString($item->id)) }}"
+                                                        class="btn btn-info"><i class="fa fa-book"></i> Absen
+                                                    </a>
+                                                @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
+                                                    <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
+                                                        class="btn btn-info"><i class="fa fa-book"></i> Absen
+                                                    </a>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#edit-{{ $item->id }}"
+                                                        class="btn btn-light-warning"><i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#delete-{{ $item->id }}"
+                                                        class="btn btn-light-danger"><i class="fa fa-trash"></i>
+                                                    </a>
+                                                    @include('pages.jadwal.components.modal_edit')
+                                                    @include('pages.jadwal.components.modal_delete')
+                                                @endif
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

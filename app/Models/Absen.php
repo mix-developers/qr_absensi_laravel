@@ -29,4 +29,10 @@ class Absen extends Model
     {
         return $this->hasMany(AbsenConfirm::class, 'id_absen');
     }
+    public static function getPertemuan($id_jadwal)
+    {
+        $absen = self::where('id_jadwal', $id_jadwal)->count();
+        $pertemuan = 16;
+        return '<b>' . $absen . '</b>/' . $pertemuan . ' Pertemuan';
+    }
 }

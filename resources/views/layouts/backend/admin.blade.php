@@ -20,7 +20,7 @@
     <meta name="author" content="MIX Developer - " />
 
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ asset('/img/logo-white.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('/img/favicon.png') }}" type="image/x-icon">
 
     <link rel="stylesheet" href="{{ asset('backand_theme') }}/assets/css/plugins/animate.min.css">
     <link rel="stylesheet" href="{{ asset('backand_theme') }}/assets/css/plugins/dataTables.bootstrap4.min.css">
@@ -96,13 +96,14 @@
     <nav class="pc-sidebar ">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="{{ url('/dashboard') }}" class="b-brand">
+                <a href="{{ url('/') }}" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
-                    {{-- <img src="{{ asset('/') }}img/favicon-3.png" alt="" class="logo logo-lg"
-                        style="max-width:150px;">
-                    <img src="{{ asset('backand_theme') }}/assets/images/logo-sm.svg" alt=""
-                        class="logo logo-sm"> --}}
-                    <h2 class="text-white logo logo-lg">{{ config('app.name') }}</h2>
+                    <div class="form-inline justify-content-center">
+                        <img src="{{ asset('/img/favicon.png') }}" height="40px" class="logo logo-lg px-2"
+                            alt="logo">
+                        <h2 class="text-white logo logo-lg">{{ config('app.name') }}</h2>
+                    </div>
+                    <img src="{{ asset('/img/favicon.png') }}" height="50px" class="logo logo-sm" alt="logo">
                     <h2 class="text-white logo logo-sm">{{ config('app.name') }}</h2>
                 </a>
             </div>
@@ -128,11 +129,44 @@
             </div>
             <div class="mr-auto pc-mob-drp">
                 <ul class="list-unstyled">
+
                 </ul>
             </div>
             <div class="ml-auto">
                 <ul class="list-unstyled">
 
+                    <li class="pc-h-item">
+                        <a class="pc-head-link mr-0" href="#" data-toggle="dropdown" role="button"
+                            aria-haspopup="false" aria-expanded="false">
+                            <i data-feather="bell" class="text-primary"></i>
+                            @if (App\Models\Notifikasi::where('id_user', Auth::user()->id)->where('read_at', null)->count() != 0)
+                                <span class="badge badge-danger pc-h-badge dots"><span class="sr-only"></span></span>
+                            @endif
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
+                            <div class=" dropdown-header">
+                                <h6 class="text-overflow m-0">Notifikasi !</h6>
+                            </div>
+                            @foreach (App\Models\Notifikasi::where('id_user', Auth::user()->id)->where('read_at', null)->limit(10)->orderBy('id', 'DESC')->get() as $item)
+                                <form action="{{ route('read_notif', $item->id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="dropdown-item">
+                                        <i data-feather="info"
+                                            class="{{ $item->type == 'danger' ? 'text-danger' : 'text-success' }}"></i>
+                                        <span>{{ Str::limit($item->content, 50) }}</span>
+                                        <br><small
+                                            class="text-muted ml-4">{{ $item->created_at->diffForHumans() }}</small>
+                                    </button>
+                                </form>
+                            @endforeach
+                            <hr>
+                            <a href="{{ route('notifikasi') }}" class="dropdown-item text-center">
+                                <span>Lihat semua</span>
+                            </a>
+                        </div>
+                    </li>
                     <li class="dropdown pc-h-item">
                         <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
                             role="button" aria-haspopup="false" aria-expanded="false">

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absen;
+use App\Models\AbsenIjin;
 use App\Models\AbsenMahasiswa;
+use App\Models\AbsenMateri;
 use App\Models\Jadwal;
 use App\Models\JadwalMahasiswa;
 use App\Models\User;
@@ -23,6 +25,8 @@ class JadwalController extends Controller
     {
         if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan') {
             $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
+        } elseif (Auth::user()->role == 'mahasiswa') {
+            $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)->get();
         } else {
             $jadwal = Jadwal::all();
         }
@@ -57,9 +61,11 @@ class JadwalController extends Controller
         $ID = Crypt::decryptString($id);
         // dd($id);
         $jadwal = Jadwal::find($ID);
+        $ijin = AbsenIjin::where('id_jadwal', $ID)->where('konfirmasi', 1)->get();
         $data = [
             'title' => 'Data Absen Kuliah',
             'jadwal' => $jadwal,
+            'ijin' => $ijin,
             'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
         ];
         return view('pages.jadwal.show', $data);
@@ -234,10 +240,14 @@ class JadwalController extends Controller
     {
         $jadwal = Jadwal::find($id);
         $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
+        $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
+        $materi = AbsenMateri::where('id_jadwal', $id)->get();
 
         $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_absen', [
             'data' => $data,
             'jadwal' => $jadwal,
+            'ijin' => $ijin,
+            'materi' => $materi
         ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
 
         return $pdf->stream('Data Absen ' . $jadwal->matakuliah->name  . date('d-m-Y') . '.pdf');

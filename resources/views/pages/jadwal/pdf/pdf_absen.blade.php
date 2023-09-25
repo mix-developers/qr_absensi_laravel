@@ -12,6 +12,10 @@
             font-size: 16px;
         }
 
+        .page_break {
+            page-break-before: always;
+        }
+
         table.table_custom th,
         table.table_custom td {
             border-collapse: collapse;
@@ -43,6 +47,85 @@
         </table>
         <hr style="border: 1px solid black;">
         <table class="table-borderless mb-3">
+            <tr>
+                <td>Laporan</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>Data Materi Pertemuan</b></td>
+            </tr>
+            <tr>
+                <td>Matakuliah</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->matakuliah->name }}</b> (Kelas {{ $jadwal->class->name }})</td>
+            </tr>
+            <tr>
+                <td>Dosen Pengampuh</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->user->name }}</b></td>
+            </tr>
+        </table>
+        <div class="table-responsive">
+            <table class="table_custom" style="width: 100%;">
+                <thead>
+                    <th style="width: 150px;">Pertemuan</th>
+                    <th style="width: 150px;">Tanggal</th>
+                    <th>Materi</th>
+                    <th style="width: 250px;">Dosen Pengampuh</th>
+                    <th style="width: 100px;">Paraf</th>
+                    <th style="width: 250px;">Mahasiswa</th>
+                    <th style="width: 100px;">Paraf</th>
+                </thead>
+                <tbody>
+                    @foreach ($materi as $item)
+                        <tr>
+                            <td>Pertemuan {{ $loop->iteration }}</td>
+                            <td>
+                                <b> {{ $item->absen->created_at->format('d F Y') }}</b><br>
+                                {{ $item->jadwal->time_start . ' - ' . $item->jadwal->time_end }}
+                            </td>
+                            <td>{{ $item->materi }}</td>
+                            <td>{{ $jadwal->user->name }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+        </div>
+        <div class="mt-3 float-right text-center">
+            Merauke , {{ date('d F Y') }}<br>
+            Ketua Jurusan {{ App\Models\Configuration::Konfigurasi()->jurusan }}
+            <div style="margin-top:80px;">
+                <strong><u>{{ App\Models\Configuration::Konfigurasi()->kajur }}</u></strong><br>
+                NIP/NIDN.{{ App\Models\Configuration::Konfigurasi()->nip }}
+            </div>
+        </div>
+        <div class="page_break">
+        </div>
+        <table class="" style="font-size: 18px; padding:5px; width:100%; border:0px;">
+            <tr>
+                <td style="width: 20%">
+                    <img style="width: 130px;" src="{{ public_path('img') }}/musamus.png">
+                </td>
+                <td class="text-center" style="width: 80%">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN
+                    RISET, DAN TEKNOLOGI<br>
+                    UNIVERSITAS MUSAMUS (UNMUS)<br>
+                    FAKULTAS TEKNIK<br>
+                    <b>JURUSAN SISTEM INFORMASI</b><br>
+                    Jl. Kamizaun Mopah Lama Merauke 99600 Telp/Fax (0971) 325923<br>
+                    E-mail: si@unmus.ac.id, Website: http://unmus.ac.id
+                </td>
+                <td style="width: 20%"></td>
+            </tr>
+        </table>
+        <hr style="border: 1px solid black;">
+        <table class="table-borderless mb-3">
+            <tr>
+                <td>Laporan</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>Data Absen</b></td>
+            </tr>
             <tr>
                 <td>Matakuliah</td>
                 <td style="width: 15px" class="text-center">:</td>
@@ -126,7 +209,70 @@
             Ketua Jurusan {{ App\Models\Configuration::Konfigurasi()->jurusan }}
             <div style="margin-top:80px;">
                 <strong><u>{{ App\Models\Configuration::Konfigurasi()->kajur }}</u></strong><br>
-                {{ App\Models\Configuration::Konfigurasi()->nip }}
+                NIP/NIDN.{{ App\Models\Configuration::Konfigurasi()->nip }}
+            </div>
+        </div>
+        <div class="page_break"></div>
+        <table class="" style="font-size: 18px; padding:5px; width:100%; border:0px;">
+            <tr>
+                <td style="width: 20%">
+                    <img style="width: 130px;" src="{{ public_path('img') }}/musamus.png">
+                </td>
+                <td class="text-center" style="width: 80%">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN
+                    RISET, DAN TEKNOLOGI<br>
+                    UNIVERSITAS MUSAMUS (UNMUS)<br>
+                    FAKULTAS TEKNIK<br>
+                    <b>JURUSAN SISTEM INFORMASI</b><br>
+                    Jl. Kamizaun Mopah Lama Merauke 99600 Telp/Fax (0971) 325923<br>
+                    E-mail: si@unmus.ac.id, Website: http://unmus.ac.id
+                </td>
+                <td style="width: 20%"></td>
+            </tr>
+        </table>
+        <hr style="border: 1px solid black;">
+        <table class="table-borderless mb-3">
+            <tr>
+                <td>Laporan</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>Data Ijin</b></td>
+            </tr>
+            <tr>
+                <td>Matakuliah</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->matakuliah->name }}</b> (Kelas {{ $jadwal->class->name }})</td>
+            </tr>
+            <tr>
+                <td>Dosen Pengampuh</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->user->name }}</b></td>
+            </tr>
+        </table>
+        <table class="table_custom" style="width: 100%;">
+            <thead>
+                <th class="text-center" style="width: 50px;">#</th>
+                <th>Nama Mahasiswa</th>
+                <th>NPM</th>
+                <th>Tanggal Ijin</th>
+                <th>Jenis Ijin</th>
+            </thead>
+            <tbody>
+                @foreach ($ijin as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->user->full_name }}</td>
+                        <td>{{ $item->user->identity }}</td>
+                        <td>{{ $item->tanggal }}</td>
+                        <td>{{ $item->jenis }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="mt-3 float-right text-center">
+            Merauke , {{ date('d F Y') }}<br>
+            Ketua Jurusan {{ App\Models\Configuration::Konfigurasi()->jurusan }}
+            <div style="margin-top:80px;">
+                <strong><u>{{ App\Models\Configuration::Konfigurasi()->kajur }}</u></strong><br>
+                NIP/NIDN.{{ App\Models\Configuration::Konfigurasi()->nip }}
             </div>
         </div>
 

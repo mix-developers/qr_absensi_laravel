@@ -100,6 +100,31 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <hr class="mt-2">
+                    <h5 class="my-3">Data Ijin Mahasiswa</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>#</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Tanggal Ijin</th>
+                                <th>Jenis Ijin</th>
+                                <th>Keterangan</th>
+                            </thead>
+                            <tbody>
+                                @foreach ($ijin as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->user->full_name }}</td>
+                                        <td>{{ $item->tanggal }}</td>
+                                        <td>{{ $item->jenis }}</td>
+                                        <td>{{ $item->keterangan }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
