@@ -20,7 +20,7 @@
     <meta name="author" content="MIX Developer - " />
 
     <!-- Favicon icon -->
-    <link rel="icon" href="{{ asset('/img/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('/img/logo.png') }}" type="image/x-icon">
 
     <link rel="stylesheet" href="{{ asset('backand_theme') }}/assets/css/plugins/animate.min.css">
     <link rel="stylesheet" href="{{ asset('backand_theme') }}/assets/css/plugins/dataTables.bootstrap4.min.css">
