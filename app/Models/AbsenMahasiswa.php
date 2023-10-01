@@ -44,4 +44,20 @@ class AbsenMahasiswa extends Model
         $exist = self::with(['user', 'jadwal'])->where('id_absen', $id_absen)->where('id_user', $id_user);
         return $exist;
     }
+    public static function getKehadiran($id_user, $id_jadwal)
+    {
+        $kehadiran = self::where('id_user', $id_user)->where('id_jadwal', $id_jadwal)->count();
+
+        return $kehadiran;
+    }
+    public static function getTotalAbsen($id_user, $id_jadwal)
+    {
+        $absen = Absen::where('id_jadwal', $id_jadwal)->count();
+        return $absen;
+    }
+    public static function getKehadiranTotal($id_user, $id_jadwal)
+    {
+
+        return self::getKehadiran($id_user, $id_jadwal) . '/' . Self::getTotalAbsen($id_user, $id_jadwal) . ' Absen';
+    }
 }

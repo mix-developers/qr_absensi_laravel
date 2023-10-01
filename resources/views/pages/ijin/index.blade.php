@@ -26,6 +26,7 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th>#</th>
+                                    <th>Bukti</th>
                                     <th>Tanggal Ijin</th>
                                     <th>Matakuliah</th>
                                     <th>Jenis Ijin</th>
@@ -39,6 +40,7 @@
                                 @foreach ($absen_ijin as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td><img src="{{ Storage::url($item->foto) }}" style="height: 100px;"></td>
                                         <td>{{ $item->tanggal }}</td>
                                         <td>
                                             <strong>{{ $item->jadwal->matakuliah->name }}</strong><br>

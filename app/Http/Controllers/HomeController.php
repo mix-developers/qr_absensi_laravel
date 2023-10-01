@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Classes;
 use App\Models\Jadwal;
+use App\Models\JadwalMahasiswa;
 use App\Models\MataKuliah;
 use App\Models\Notifikasi;
 use App\Models\Ruangan;
@@ -45,6 +46,7 @@ class HomeController extends Controller
             'title' => 'Dashboard',
             'widget' => $widget,
             'jadwal' => Jadwal::all(),
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_user', Auth::user()->id)->get(),
         ];
 
         return view('pages.home', $data);

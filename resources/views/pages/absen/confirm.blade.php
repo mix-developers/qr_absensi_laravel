@@ -38,8 +38,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($absen_mahasiswa && $absen_mahasiswa->count() > 0)
-                                            @forelse($absen_mahasiswa as $list)
+                                        @if ($absen_mahasiswa->get() && $absen_mahasiswa->count() > 0)
+                                            @forelse($absen_mahasiswa->get() as $list)
                                                 @php
                                                     $foto = App\Models\AbsenFoto::getFoto($list->id_absen, $list->id_user);
                                                     
@@ -68,15 +68,14 @@
                                 </table>
                             </div>
                             <div class="my-2">
-                                @if ($absen_mahasiswa->count() > 0)
+                                @if ($absen_mahasiswa->get()->count() > 0)
                                     @if ($absen_confirm == null)
-                                        <form action="{{ route('absen.storeConfirm') }}" method="POST"
+                                        <form id="confirmForm" action="{{ route('absen.storeConfirm') }}" method="POST"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="id_absen" value="{{ $absen->id }}">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-check "></i>
-                                                Konfirmasi
-                                                Kehadiran</button>
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>
+                                                Konfirmasi Kehadiran</button>
                                         </form>
                                     @endif
                                 @endif
@@ -88,3 +87,32 @@
         </div>
     </div>
 @endsection
+@push('js')
+    @if ($absen_confirm == null && $absen_mahasiswa->first() && $absen_mahasiswa->first()->created_at)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var confirmForm = document.getElementById('confirmForm');
+
+                if (confirmForm) {
+                    confirmForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                        // Dapatkan tanggal dari created_at pada elemen pertama
+                        var createdAt = new Date('{{ $absen_mahasiswa->first()->created_at }}');
+                        var oneDayAgo = new Date();
+                        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+                        if (createdAt > oneDayAgo) {
+                            // Tanggal created_at kurang dari 1 hari
+                            this.submit(); // Kirim formulir
+                        }
+                        // else {
+                        //     alert(
+                        //         'Maaf, Anda tidak dapat mengkonfirmasi kehadiran setelah 1 hari dari penciptaan.');
+                        // }
+                    });
+                }
+            });
+        </script>
+    @endif
+@endpush

@@ -50,7 +50,7 @@ class AbsenController extends Controller
             'title' => 'Konfirmasi Absen',
             'absen' => Absen::find($id),
             'absen_confirm' => AbsenConfirm::where('id_absen', $id)->first(),
-            'absen_mahasiswa' => AbsenMahasiswa::where('id_absen', $id)->get(),
+            'absen_mahasiswa' => AbsenMahasiswa::where('id_absen', $id),
         ];
         return view('pages.absen.confirm', $data);
     }

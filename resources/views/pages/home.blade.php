@@ -95,6 +95,39 @@
                     </div>
                 </div>
             </div>
+            @if (Auth::user()->role == 'mahasiswa')
+                <div class="row">
+                    @foreach ($jadwal_mahasiswa as $item)
+                        <div class="col-lg-4 col-md-6 p-2">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h2>{{ $item->jadwal->matakuliah->name }}</h2>
+                                    <small></small>
+                                    <hr>
+                                    @if (App\Models\AbsenMahasiswa::getKehadiran(Auth::user()->id, $item->id_jadwal) <
+                                            App\Models\AbsenMahasiswa::getTotalAbsen(Auth::user()->id, $item->id_jadwal))
+                                        <div class="alert alert-danger border-left-danger alert-dismissible fade show"
+                                            role="alert">
+                                            Anda tidak masuk sebanyak :
+                                            {{ App\Models\AbsenMahasiswa::getTotalAbsen(Auth::user()->id, $item->id_jadwal) -
+                                                App\Models\AbsenMahasiswa::getKehadiran(Auth::user()->id, $item->id_jadwal) }}
+                                            Kali
+                                        </div>
+                                    @else
+                                        {{-- <div class="alert alert-success border-left-success alert-dismissible fade show"
+                                            role="alert">
+                                            Kehadrian pada matakuliah ini bagus..
+                                        </div> --}}
+                                    @endif
+                                    <span class="text-primary h6">Kehadiran :
+                                        <b>{{ App\Models\AbsenMahasiswa::getKehadiranTotal(Auth::user()->id, $item->id_jadwal) }}</b>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
             <div class="row">
 

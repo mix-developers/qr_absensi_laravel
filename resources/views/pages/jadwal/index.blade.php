@@ -69,7 +69,7 @@
                                         <td>{{ $user == 'mahasiswa' ? $item->jadwal->user->full_name : $item->user->full_name }}
                                         </td>
                                         <td>
-                                            {!! App\Models\Absen::getPertemuan($item->id) !!}
+                                            {!! App\Models\Absen::getPertemuan($user == 'mahasiswa' ? $item->jadwal->id : $item->id) !!}
                                         </td>
                                         @if ($user != 'mahasiswa')
                                             <td style="width: 300px;">
