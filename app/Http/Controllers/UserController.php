@@ -46,11 +46,13 @@ class UserController extends Controller
                 'name' => ['required'],
                 'identity' => ['required', 'unique:users,identity'],
                 'email' => ['required', 'email', 'unique:users,email'],
-                'tempat_lahir' => ['required'],
+                'tempat_lahir' => ['required', 'string'],
                 'tanggal_lahir' => ['required', 'date'],
+                'password' => ['nullable', 'string'],
             ]);
 
             $user = new User();
+            $user->password = $request->password;
             $user->name = $request->name;
             $user->last_name = $request->last_name;
             $user->role = $request->role;
@@ -59,10 +61,7 @@ class UserController extends Controller
             $user->identity = $request->identity;
             $user->tempat_lahir = $request->tempat_lahir;
             $user->tanggal_lahir = $request->tanggal_lahir;
-
-            // Set password default ke "password" dan hash
-            $user->password = Hash::make('password');
-
+            // dd($user->password);
             if ($user->save()) {
                 return redirect()->back()->with('success', 'Berhasil menambahkan data');
             } else {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absen;
+use App\Models\AbsenConfirm;
 use App\Models\AbsenIjin;
 use App\Models\AbsenMahasiswa;
 use App\Models\AbsenMateri;
@@ -58,17 +59,26 @@ class JadwalController extends Controller
     }
     public function show($id)
     {
-        $ID = Crypt::decryptString($id);
-        // dd($id);
-        $jadwal = Jadwal::find($ID);
-        $ijin = AbsenIjin::where('id_jadwal', $ID)->where('konfirmasi', 1)->get();
-        $data = [
-            'title' => 'Data Absen Kuliah',
-            'jadwal' => $jadwal,
-            'ijin' => $ijin,
-            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
-        ];
-        return view('pages.jadwal.show', $data);
+        try {
+            $ID = Crypt::decryptString($id);
+            // dd($id);
+            $jadwal = Jadwal::find($ID);
+            $ijin = AbsenIjin::where('id_jadwal', $ID)->where('konfirmasi', 1)->get();
+            $absen_latest = Absen::where('id_user', Auth::user()->id)->first();
+            $data = [
+                'title' => 'Data Absen Kuliah',
+                'jadwal' => $jadwal,
+                'ijin' => $ijin,
+                'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+                //konfirmasi absen otomatis
+                'absen' => $absen_latest,
+                'absen_confirm' => AbsenConfirm::where('id_absen', $absen_latest->id)->first(),
+                'absen_mahasiswa' => AbsenMahasiswa::where('id_absen', $absen_latest->id),
+            ];
+            return view('pages.jadwal.show', $data);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
     public function show_jadwal_mahasiswa($id)
     {

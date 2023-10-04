@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -42,16 +43,6 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        // if (auth()->user()->role == 'admin' || auth()->user()->role == 'super_admin') {
-        //     return '/admin';
-        // } elseif (auth()->user()->role == 'dosen') {
-        //     return '/dosen';
-        // } elseif (auth()->user()->role == 'mahasiswa') {
-        //     return '/mahasiswa';
-        // } else {
-        //     return '/ketua_jurusan';
-        // }
-        // return '/';
 
         session()->flash('success', 'You are logged in!');
         return $this->redirectTo;
@@ -59,5 +50,9 @@ class LoginController extends Controller
     public function username()
     {
         return 'identity';
+    }
+    protected function credentials(Request $request)
+    {
+        return array_merge($request->only($this->username(), 'password'), ['active' => 1]);
     }
 }

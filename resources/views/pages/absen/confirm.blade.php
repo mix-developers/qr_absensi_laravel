@@ -91,26 +91,27 @@
     @if ($absen_confirm == null && $absen_mahasiswa->first() && $absen_mahasiswa->first()->created_at)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                var confirmForm = document.getElementById('confirmForm');
+                var createdAt = new Date(
+                    '{{ \Carbon\Carbon::parse($absen_mahasiswa->first()->created_at)->format('Y-m-d\TH:i:s') }}');
+                var now = new Date();
+                var timeDiff = Math.abs(now - createdAt) / 60000; // Dalam menit
 
-                if (confirmForm) {
-                    confirmForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
+                if (timeDiff > 30) {
+                    var formData = new FormData();
+                    formData.append('id_absen', '{{ $absen->id }}');
 
-                        // Dapatkan tanggal dari created_at pada elemen pertama
-                        var createdAt = new Date('{{ $absen_mahasiswa->first()->created_at }}');
-                        var oneDayAgo = new Date();
-                        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-
-                        if (createdAt > oneDayAgo) {
-                            // Tanggal created_at kurang dari 1 hari
-                            this.submit(); // Kirim formulir
-                        }
-                        // else {
-                        //     alert(
-                        //         'Maaf, Anda tidak dapat mengkonfirmasi kehadiran setelah 1 hari dari penciptaan.');
-                        // }
-                    });
+                    fetch('{{ route('absen.storeConfirm') }}', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data); // Tindakan setelah mendapatkan respons dari server
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
             });
         </script>

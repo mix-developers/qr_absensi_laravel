@@ -11,8 +11,9 @@
                 @csrf
                 <div class="card-body">
                     <div class="alert alert-primary border-left-primary alert-dismissible fade show" role="alert">
-                        Password default : <b>password</b>
+                        Password default : <b>dosen</b>
                     </div>
+                    <input type="hidden" name="password" value="dosen">
                     <div class="form-group">
                         <label for="day">Pilih Jabatan</label>
                         <select class="form-control" name="role">

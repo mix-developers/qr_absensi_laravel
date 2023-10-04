@@ -11,8 +11,9 @@
                 @csrf
                 <div class="card-body">
                     <div class="alert alert-primary border-left-primary alert-dismissible fade show" role="alert">
-                        Password default : <b>password</b>
+                        Password default : <b>mahasiswa</b>
                     </div>
+                    <input type="hidden" name="password" value="mahasiswa">
                     <input type="hidden" name="role" value="mahasiswa">
                     <div class="form-group">
                         <label for="day">Pilih Angkatan</label>
@@ -26,7 +27,6 @@
                         <label>Nama Lengkap</label>
                         <input type="text" name="name" class="form-control" placeholder="Nama mahasiswa">
                     </div>
-
                     <div class="form-group">
                         <label>NPM</label>
                         <input type="text" name="identity" class="form-control" placeholder="xxxxxxxxx">

@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
-
+Route::middleware('auto.absen.confirmation')->group(function () {
+    Route::post('/storeConfirm', [AbsenController::class, 'storeConfirm']);
+});
 Route::middleware(['auth'])->group(function () {
     Route::put('/read_notif/{id}', [NotifikasiController::class, 'read'])->name('read_notif');
     Route::put('/read_all/{id}', [NotifikasiController::class, 'read_all'])->name('read_all');
