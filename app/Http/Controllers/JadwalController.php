@@ -73,7 +73,7 @@ class JadwalController extends Controller
                 //konfirmasi absen otomatis
                 'absen' => $absen_latest,
                 'absen_confirm' => AbsenConfirm::where('id_absen', $absen_latest->id)->first(),
-                'absen_mahasiswa' => AbsenMahasiswa::where('id_absen', $absen_latest->id),
+                'absen_mahasiswa' => AbsenConfirm::where('id_absen', $absen_latest->id),
             ];
             return view('pages.jadwal.show', $data);
         } catch (\Exception $e) {

@@ -20,66 +20,82 @@
                 </div>
             @endif
             <div class="row">
-
                 <div class="col-12">
                     <div class="card shadow-sm">
                         <div class="card-header">
                             <h5>{{ $title }}</h5>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped mb-0 lara-dataTable">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <td>#</td>
-                                            <td>Bukti Foto</td>
-                                            <td>Mahasiswa</td>
-                                            <td>Waktu</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($absen_mahasiswa->get() && $absen_mahasiswa->count() > 0)
-                                            @forelse($absen_mahasiswa->get() as $list)
-                                                @php
-                                                    $foto = App\Models\AbsenFoto::getFoto($list->id_absen, $list->id_user);
-                                                    
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td><img src="{{ $foto != null || $foto != '' ? $foto : '' }}"
-                                                            style="height: 100px;"></td>
-                                                    <td><strong>{{ $list->user->name }}</strong><br>
-                                                        <small>{{ $list->user->identity }}</small>
-                                                    </td>
-                                                    <td>{{ $list->created_at }}</td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="2">Belum ada yang absen</td>
-                                                </tr>
-                                            @endforelse
-                                        @else
+                            <form id="confirmForm" action="{{ route('absen.storeConfirm') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="table-responsive">
+                                    <table class="table table-bordered  mb-0 lara-dataTable">
+                                        <thead class="bg-light">
                                             <tr>
-                                                <td colspan="2">Belum ada yang absen</td>
+                                                <th style="width: 10px;">
+                                                    <input type="checkbox" id="checkAll">
+                                                </th>
+                                                <th>#</th>
+                                                <th>Bukti Foto</th>
+                                                <th>Mahasiswa</th>
+                                                <th>Waktu</th>
                                             </tr>
-                                        @endif
-
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="my-2">
-                                @if ($absen_mahasiswa->get()->count() > 0)
-                                    @if ($absen_confirm == null)
-                                        <form id="confirmForm" action="{{ route('absen.storeConfirm') }}" method="POST"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            <input type="hidden" name="id_absen" value="{{ $absen->id }}">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>
-                                                Konfirmasi Kehadiran</button>
-                                        </form>
+                                        </thead>
+                                        <tbody>
+                                            @if ($absen_mahasiswa && $absen_mahasiswa->count() > 0)
+                                                @forelse($absen_mahasiswa->get() as $list)
+                                                    @php
+                                                        $foto = App\Models\AbsenFoto::getFoto($list->id_absen, $list->id_user);
+                                                    @endphp
+                                                    <tr class="@if ($absen_confirm != null && App\Models\AbsenConfirm::checkAbsen($list->id_absen, $list->id_user) == null) bg-light-danger @endif">
+                                                        <td>
+                                                            <input type="checkbox" name="konfirmasi[]"
+                                                                value="{{ $list->id_absen }}" />
+                                                            <input type="hidden" name="id_user[]"
+                                                                value="{{ $list->id_user }}">
+                                                        </td>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>
+                                                            <a href="#" data-toggle="modal"
+                                                                data-target="#foto-{{ $list->id }}">
+                                                                <img src="{{ $foto != null || $foto != '' ? $foto : '' }}"
+                                                                    style="height: 100px;">
+                                                            </a>
+                                                            @include('pages.absen.components.modal_foto')
+                                                        </td>
+                                                        <td><strong>{{ $list->user->name }}</strong><br>
+                                                            <small>{{ $list->user->identity }}</small>
+                                                        </td>
+                                                        <td>{{ $list->created_at }}</td>
+                                                    </tr>
+                                                    @php
+                                                        $id_jadwal = $list->id_jadwal;
+                                                        $id_user = $list->id_user;
+                                                        $id_absen = $list->id_absen;
+                                                    @endphp
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="5">Belum ada yang absen</td>
+                                                    </tr>
+                                                @endforelse
+                                            @else
+                                                <tr>
+                                                    <td colspan="5">Belum ada yang absen</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="my-2">
+                                    @if ($absen_confirm == null && $absen_mahasiswa->count() != 0)
+                                        <button type="submit" class="btn btn-primary" id="konfirmasiButton" disabled>
+                                            <i class="fa fa-check"></i>
+                                            Konfirmasi Kehadiran
+                                        </button>
                                     @endif
-                                @endif
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -87,33 +103,4 @@
         </div>
     </div>
 @endsection
-@push('js')
-    @if ($absen_confirm == null && $absen_mahasiswa->first() && $absen_mahasiswa->first()->created_at)
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var createdAt = new Date(
-                    '{{ \Carbon\Carbon::parse($absen_mahasiswa->first()->created_at)->format('Y-m-d\TH:i:s') }}');
-                var now = new Date();
-                var timeDiff = Math.abs(now - createdAt) / 60000; // Dalam menit
-
-                if (timeDiff > 30) {
-                    var formData = new FormData();
-                    formData.append('id_absen', '{{ $absen->id }}');
-
-                    fetch('{{ route('absen.storeConfirm') }}', {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data); // Tindakan setelah mendapatkan respons dari server
-                        })
-                        .catch(error => console.error('Error:', error));
-                }
-            });
-        </script>
-    @endif
-@endpush
+@include('pages.absen.components.script')

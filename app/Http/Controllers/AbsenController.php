@@ -54,43 +54,86 @@ class AbsenController extends Controller
         ];
         return view('pages.absen.confirm', $data);
     }
+    // public function storeConfirm(Request $request)
+    // {
+    //     try {
+    //         $confirm = new AbsenConfirm();
+    //         $confirm->id_user = Auth::user()->id;
+    //         $confirm->id_absen = $request->id_absen;
+
+    //         $absen = Absen::find($request->id_absen);
+    //         $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->get();
+
+    //         foreach ($jadwal as $item) {
+    //             $cek_absen = AbsenMahasiswa::where('id_user', $item->id_user);
+    //             if ($cek_absen) {
+    //                 $notif = new Notifikasi();
+    //                 $notif->id_user = $item->id_user;
+    //                 $notif->content = 'Anda tidak melakukan absen pada matakuliah ' . $item->jadwal->matakuliah->name;
+    //                 $notif->type = 'danger';
+    //                 $notif->url = '/jadwal';
+    //                 $notif->save();
+    //             }
+    //         }
+
+    //         $absen_foto = AbsenFoto::where('id_absen', $request->id_absen)->get();
+    //         foreach ($absen_foto as $foto) {
+    //             $foto->delete();
+    //             Storage::delete($foto->foto);
+    //         }
+
+    //         if ($confirm->save()) {
+    //             return redirect()->back()->with('success', 'Absen Berhasil di konfirmasi');
+    //         } else {
+    //             return redirect()->back()->with('danger', 'Absen gagal di konfirmasi');
+    //         }
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+    //     }
+    // }
     public function storeConfirm(Request $request)
     {
         try {
-            $confirm = new AbsenConfirm();
-            $confirm->id_user = Auth::user()->id;
-            $confirm->id_absen = $request->id_absen;
+            $absenIds = $request->input('konfirmasi');
+            $idUserArray = $request->input('id_user');
 
-            $absen = Absen::find($request->id_absen);
-            $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->get();
+            if ($absenIds && is_array($absenIds) && $idUserArray && is_array($idUserArray)) {
+                foreach ($absenIds as $key => $absenId) {
+                    $absen = Absen::find($absenId);
 
-            foreach ($jadwal as $item) {
-                $cek_absen = AbsenMahasiswa::where('id_user', $item->id_user);
-                if ($cek_absen) {
-                    $notif = new Notifikasi();
-                    $notif->id_user = $item->id_user;
-                    $notif->content = 'Anda tidak melakukan absen pada matakuliah ' . $item->jadwal->matakuliah->name;
-                    $notif->type = 'danger';
-                    $notif->url = '/jadwal';
-                    $notif->save();
+                    if ($absen) {
+                        $data = [
+                            'id_jadwal' => $absen->id_jadwal,
+                            'id_user' => $idUserArray[$key], // Ambil id_user dari array
+                            'id_absen' => $absen->id,
+                        ];
+
+                        // Hapus foto
+                        $absen_foto = AbsenFoto::where('id_absen', $absen->id)->get();
+                        foreach ($absen_foto as $foto) {
+                            $foto->delete();
+                            Storage::delete($foto->foto);
+                        }
+
+                        // Simpan data ke model AbsenConfirm
+                        AbsenConfirm::create($data);
+                    } else {
+                        return redirect()->back()->with('danger', 'Absen tidak ditemukan');
+                    }
                 }
-            }
-
-            $absen_foto = AbsenFoto::where('id_absen', $request->id_absen)->get();
-            foreach ($absen_foto as $foto) {
-                $foto->delete();
-                Storage::delete($foto->foto);
-            }
-
-            if ($confirm->save()) {
-                return redirect()->back()->with('success', 'Absen Berhasil di konfirmasi');
             } else {
-                return redirect()->back()->with('danger', 'Absen gagal di konfirmasi');
+                return redirect()->back()->with('danger', 'Data tidak valid');
             }
+
+            return redirect()->back()->with('success', 'Absen berhasil dikonfirmasi');
         } catch (\Exception $e) {
-            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+            dd($e->getMessage()); // Tampilkan pesan kesalahan untuk debugging
+            // return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+
+
     public function createAbsen(Request $request)
     {
         try {

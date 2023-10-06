@@ -60,14 +60,15 @@
                                 @forelse($jadwal_mahasiswa as $item)
                                     @php
                                         //absen mahasiswa
-                                        $absen = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
+                                        $absen = App\Models\AbsenConfirm::getCountAbsen($item->id_user, $jadwal->id);
                                         
                                         //check pada konfirmasi absen
-                                        $count = $absen
-                                            ->whereIn('id_absen', function ($query) {
-                                                $query->select('id_absen')->from('absen_confirms');
-                                            })
-                                            ->count();
+                                        // $count = $absen
+                                        //     ->whereIn('id_absen', function ($query) {
+                                        //         $query->select('id_absen')->from('absen_confirms');
+                                        //     })
+                                        //     ->count();
+                                        $count = $absen->count();
                                         
                                     @endphp
                                     <tr>
@@ -76,7 +77,7 @@
                                         <td>{{ $item->user->name }}</td>
                                         @foreach ($absen_exist->get() as $list)
                                             @php
-                                                $exist_user = App\Models\AbsenMahasiswa::checkAbsen($list->id, $item->id_user)->count();
+                                                $exist_user = App\Models\AbsenConfirm::checkAbsen($list->id, $item->id_user)->count();
                                             @endphp
                                             <td>
                                                 @if ($exist_user > 0)
@@ -130,7 +131,7 @@
         </div>
     </div>
 @endsection
-@push('js')
+{{-- @push('js')
     @if ($absen_confirm == null && $absen_mahasiswa->first() && $absen_mahasiswa->first()->created_at)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -159,4 +160,4 @@
             });
         </script>
     @endif
-@endpush
+@endpush --}}
