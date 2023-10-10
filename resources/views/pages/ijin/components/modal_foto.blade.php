@@ -10,8 +10,6 @@
                 </button>
             </div>
             <div class="modal-body text-center">
-
-
                 <p><strong>Keterangan</strong> : {{ $item->keterangan }}</p>
                 <hr>
                 <img src="{{ Storage::url($item->foto) }}" style="width: 100%;">
