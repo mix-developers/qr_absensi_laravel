@@ -17,7 +17,11 @@ class IjinController extends Controller
         if (Auth::user()->role == 'mahasiswa') {
             $ijin = AbsenIjin::where('id_user', Auth::user()->id)->get();
         } else {
-            $ijin = AbsenIjin::all();
+            $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
+
+            $jadwalIds = $jadwal->pluck('id')->toArray();
+
+            $ijin = AbsenIjin::whereIn('id_jadwal', $jadwalIds)->get();
         }
         $data = [
             'title' => 'Pengajuan Ijin dan Sakit',

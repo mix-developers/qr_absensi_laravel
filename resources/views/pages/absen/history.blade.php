@@ -28,6 +28,7 @@
                                             <th>#</th>
                                             <th>Matakuliah</th>
                                             <th>Waktu Absen</th>
+                                            <th>Status Absen</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -38,10 +39,19 @@
                                                 <td>{{ $item->created_at->diffForHumans() }}<br>
                                                     <small>{{ $item->created_at }}</small>
                                                 </td>
+                                                <td>
+                                                    @php
+                                                        $terkonfirmasi = App\Models\AbsenConfirm::where('id_user', Auth::user()->id)->where('id_absen', $item->id_absen);
+
+                                                    @endphp
+                                                    {!! $terkonfirmasi != null
+                                                        ? '<span class="badge badge-light-success">Terkonfirmasi</span>'
+                                                        : '<span class="badge badge-light-warning">Menunggu Konfirmasi</span>' !!}
+                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4">Belum ada absen...</td>
+                                                <td colspan="5">Belum ada absen...</td>
                                             </tr>
                                         @endforelse
                                     </tbody>

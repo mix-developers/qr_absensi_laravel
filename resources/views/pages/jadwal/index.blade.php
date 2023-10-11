@@ -74,13 +74,29 @@
                                         @if ($user != 'mahasiswa')
                                             <td style="width: 300px;">
                                                 @if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan')
-                                                    <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jadwal/show', Crypt::encryptString($item->id)) }}"
+                                                    {{-- <a href="{{ Auth::user()->role == 'dosen' ? url('/jadwal/show', Crypt::encryptString($item->id)) : url('jadwal/show', Crypt::encryptString($item->id)) }}"
                                                         class="btn btn-info"><i class="fa fa-book"></i> Absen
-                                                    </a>
+                                                    </a> --}}
+                                                    <form action="{{ url('/jadwal/show', $item->id) }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        @method('GET')
+                                                        <button type="submit" class="btn btn-info">
+                                                            <i class="fa fa-book"></i> Absen
+                                                        </button>
+                                                    </form>
                                                 @elseif (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
-                                                    <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
+                                                    {{-- <a href="{{ url('/jadwal/showAdmin', Crypt::encryptString($item->id)) }}"
                                                         class="btn btn-info"><i class="fa fa-book"></i> Absen
-                                                    </a>
+                                                    </a> --}}
+                                                    <form action="{{ url('/jadwal/show', $item->id) }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        @method('GET')
+                                                        <button type="submit" class="btn btn-info">
+                                                            <i class="fa fa-book"></i> Absen
+                                                        </button>
+                                                    </form>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#edit-{{ $item->id }}"
                                                         class="btn btn-light-warning"><i class="fa fa-edit"></i>

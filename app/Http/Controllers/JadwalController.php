@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class JadwalController extends Controller
 {
@@ -60,10 +61,34 @@ class JadwalController extends Controller
     public function show($id)
     {
         try {
-            $ID = Crypt::decryptString($id);
+            // $ID = Crypt::decryptString($id);
             // dd($id);
-            $jadwal = Jadwal::find($ID);
-            $ijin = AbsenIjin::where('id_jadwal', $ID)->where('konfirmasi', 1)->get();
+            $jadwal = Jadwal::find($id);
+
+
+            //konfirmasi absen
+            $absen_mahasiswa = AbsenMahasiswa::where('id_jadwal', $id)
+                ->whereNotExists(function ($query) use ($id) {
+                    $query->select(DB::raw(1))
+                        ->from('absen_confirms')
+                        ->whereRaw('absen_confirms.id_jadwal = absen_mahasiswas.id_jadwal')
+                        ->whereRaw('absen_confirms.id_absen = absen_mahasiswas.id_absen');
+                })
+                ->get();
+
+            if ($absen_mahasiswa != null) {
+                foreach ($absen_mahasiswa as $item) {
+                    $confirm = new AbsenConfirm();
+                    $confirm->id_jadwal = $item->id_jadwal;
+                    $confirm->id_user = $item->id_user;
+                    $confirm->id_absen = $item->id_absen;
+                    $confirm->save();
+                }
+            }
+
+
+
+            $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
             $absen_latest = Absen::where('id_user', Auth::user()->id)->first();
             $data = [
                 'title' => 'Data Absen Kuliah',

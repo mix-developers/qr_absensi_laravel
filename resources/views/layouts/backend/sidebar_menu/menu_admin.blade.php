@@ -72,6 +72,10 @@
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>
             </li>
         @elseif(Auth::user()->role == 'ketua_jurusan')
+            {{--  pengajuan ijin --}}
+            <li class="pc-item"><a href="{{ route('ijin') }}" class="pc-link "><span class="pc-micon"><i
+                            data-feather="book"></i></span><span class="pc-mtext">{{ __('Pengajuan Ijin') }}</span></a>
+            </li>
             {{-- buat absen --}}
             <li class="pc-item"><a href="{{ route('absen') }}" class="pc-link "><span class="pc-micon"><i
                             data-feather="book"></i></span><span class="pc-mtext">{{ __('Buat absen') }}</span></a>

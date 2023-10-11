@@ -66,7 +66,7 @@ Route::middleware(['role:admin,super_admin'])->group(function () {
     // Route::get('/jadwal/exportAbsen/{id}', [JadwalController::class, 'exportAbsen'])->name('jadwal.exportAbsen');
     // Route::get('/jadwal/exportJadwal/{id}', [JadwalController::class, 'exportJadwal'])->name('jadwal.exportJadwal');
     // Route::get('/jadwal/exportJadwalAll', [JadwalController::class, 'exportJadwalAll'])->name('jadwal.exportJadwalAll');
-    Route::get('/jadwal/showAdmin/{id}', [JadwalController::class, 'showAdmin'])->name('jadwal.showAdmin');
+    // Route::post('/jadwal/show/{id}', [JadwalController::class, 'showAdmin'])->name('jadwal.showAdmin');
     //route user
     Route::get('/user/mahasiswa', [UserController::class, 'mahasiswa'])->name('user.mahasiswa');
     Route::get('/user/dosen', [UserController::class, 'dosen'])->name('user.dosen');
@@ -94,7 +94,7 @@ Route::middleware(['role:mahasiswa'])->group(function () {
 });
 
 // Grouping routes for dosen middleware
-Route::middleware(['role:dosen,mahasiswa'])->group(function () {
+Route::middleware(['role:dosen,mahasiswa,ketua_jurusan'])->group(function () {
     Route::get('/ijin', [IjinController::class, 'index'])->name('ijin');
     Route::put('/ijin/terima/{id}', [IjinController::class, 'terima'])->name('ijin.terima');
     Route::put('/ijin/tolak/{id}', [IjinController::class, 'tolak'])->name('ijin.tolak');
@@ -128,4 +128,8 @@ Route::middleware(['role:ketua_jurusan,admin,super_admin'])->group(function () {
     Route::get('/report/exportMahasiswa', [ReportController::class, 'exportMahasiswa'])->name('report.exportMahasiswa');
     Route::get('/report/dosen', [ReportController::class, 'dosen'])->name('report.dosen');
     Route::get('/report/exportDosen', [ReportController::class, 'exportDosen'])->name('report.exportDosen');
+});
+Route::middleware(['role:ketua_jurusan,admin,super_admin,dosen'])->group(function () {
+    //route report
+    Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
 });
