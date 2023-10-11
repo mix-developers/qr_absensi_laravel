@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Materi Kuliah</label>
-                                    <textarea class="form-control" name="materi"></textarea>
+                                    <textarea class="form-control" name="materi" required></textarea>
                                 </div>
                             </div>
                             <div class="card-footer">

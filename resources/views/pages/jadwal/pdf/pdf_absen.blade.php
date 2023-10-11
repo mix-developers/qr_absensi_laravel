@@ -63,6 +63,12 @@
                 <td><b>{{ $jadwal->user->name }}</b></td>
             </tr>
         </table>
+        @php
+            //master absen
+            $absen_exist_materi = App\Models\Absen::where('id_jadwal', $jadwal->id);
+            $total_absen_materi = $absen_exist_materi->count();
+
+        @endphp
         <div class="table-responsive">
             <table class="table_custom" style="width: 100%;">
                 <thead>
@@ -75,14 +81,14 @@
                     <th style="width: 100px;">Paraf</th>
                 </thead>
                 <tbody>
-                    @foreach ($materi as $item)
+                    @foreach ($absen_exist_materi->get() as $item)
                         <tr>
                             <td>Pertemuan {{ $loop->iteration }}</td>
                             <td>
-                                <b> {{ $item->absen->created_at->format('d F Y') }}</b><br>
+                                <b> {{ $item->created_at->format('d F Y') }}</b><br>
                                 {{ $item->jadwal->time_start . ' - ' . $item->jadwal->time_end }}
                             </td>
-                            <td>{{ $item->materi }}</td>
+                            <td>{{ App\Models\AbsenMateri::getMateriAbsen($item->id) }}</td>
                             <td>{{ $jadwal->user->name }}</td>
                             <td></td>
                             <td></td>
@@ -141,7 +147,7 @@
             //master absen
             $absen_exist = App\Models\Absen::where('id_jadwal', $jadwal->id);
             $total_absen = $absen_exist->count();
-            
+
         @endphp
         <table class="table_custom" style="width: 100%;">
             <thead>
@@ -165,14 +171,14 @@
                     @php
                         //absen mahasiswa
                         $absen = App\Models\AbsenMahasiswa::getCountAbsen($item->id_user, $jadwal->id);
-                        
+
                         //check pada konfirmasi absen
                         $count = $absen
                             ->whereIn('id_absen', function ($query) {
                                 $query->select('id_absen')->from('absen_confirms');
                             })
                             ->count();
-                        
+
                     @endphp
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Absen;
 use App\Models\AbsenConfirm;
+use App\Models\AbsenFoto;
 use App\Models\AbsenIjin;
 use App\Models\AbsenMahasiswa;
 use App\Models\AbsenMateri;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class JadwalController extends Controller
 {
@@ -86,7 +88,19 @@ class JadwalController extends Controller
                 }
             }
 
-
+            //hapus foto
+            $absen = Absen::where('id_jadwal', $id);
+            if ($absen != null) {
+                foreach ($absen->get() as $abs) {
+                    $foto_absen = AbsenFoto::where('id_absen', $abs->id_absen);
+                    if ($foto_absen != null) {
+                        foreach ($foto_absen->get() as $foto) {
+                            $foto_absen->delete();
+                            Storage::delete($foto->foto);
+                        }
+                    }
+                }
+            }
 
             $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
             $absen_latest = Absen::where('id_user', Auth::user()->id)->first();
