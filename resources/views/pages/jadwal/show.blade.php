@@ -26,24 +26,26 @@
                             //master absen
                             $absen_exist = App\Models\Absen::where('id_jadwal', $jadwal->id);
                             $total_absen = $absen_exist->count();
-                            
+
                         @endphp
                         <table class="table table-bordered">
                             <thead>
                                 <tr class=" align-middle text-center ">
-                                    <th rowspan="2">No</th>
+                                    <th rowspan="2" style="width: 5px;">No</th>
                                     <th colspan="2">Mahasiswa</th>
                                     <th colspan="16">Pertemuan</th>
                                 </tr>
                                 <tr class=" text-center">
-                                    <th>NPM</th>
+                                    <th style="width:50px;">NPM</th>
                                     <th>Nama</th>
                                     @foreach ($absen_exist->get() as $list)
-                                        <th>{{ $loop->iteration }}<br>
+                                        <th style="padding: 0px;">{{ $loop->iteration }}<br>
                                             <a href="#" data-toggle="modal"
                                                 data-target="#materi-{{ $list->id }}                                                                                                                                                                                                                                                                                                                                  "><i
                                                     class="fa fa-comments fa-xs"></i>
                                             </a>
+                                            <br>
+                                            <small style="font-size: 10px;">{{ $list->created_at->format('d/m/Y') }}</small>
                                             @include('pages.jadwal.components.modal_materi')
                                         </th>
                                     @endforeach
@@ -61,7 +63,7 @@
                                     @php
                                         //absen mahasiswa
                                         $absen = App\Models\AbsenConfirm::getCountAbsen($item->id_user, $jadwal->id);
-                                        
+
                                         //check pada konfirmasi absen
                                         // $count = $absen
                                         //     ->whereIn('id_absen', function ($query) {
@@ -69,7 +71,7 @@
                                         //     })
                                         //     ->count();
                                         $count = $absen->count();
-                                        
+
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>

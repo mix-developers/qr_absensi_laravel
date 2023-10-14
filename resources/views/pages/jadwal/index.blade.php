@@ -26,9 +26,20 @@
                 </div>
                 <div class="card-body">
                     <div class="my-3 text-right">
-                        <a href="{{ url('/jadwal/exportJadwalAll') }}" class="btn btn-primary" target="__blank"><i
-                                class="fa fa-print"></i>
-                            Cetak Jadwal</a>
+                        @if ($user == 'dosen' || $user == 'ketua_jurusan')
+                            <a href="{{ url('/jadwal/exportJadwal', Auth::user()->id) }}" class="btn btn-primary"
+                                target="__blank"><i class="fa fa-print"></i>
+                                Cetak Jadwal</a>
+                        @elseif($user == 'admin' || $user == 'super_admin')
+                            <a href="{{ url('/jadwal/exportJadwalAll') }}" class="btn btn-primary" target="__blank"><i
+                                    class="fa fa-print"></i>
+                                Cetak Jadwal</a>
+                        @else
+                            <a href="{{ url('/jadwal/exportJadwalMahasiswa', Auth::user()->id) }}" class="btn btn-primary"
+                                target="__blank"><i class="fa fa-print"></i>
+                                Cetak Jadwal</a>
+                        @endif
+
                     </div>
                     <div class="table-responsive">
 

@@ -63,12 +63,9 @@ class JadwalController extends Controller
     public function show($id)
     {
         try {
-            // $ID = Crypt::decryptString($id);
-            // dd($id);
             $jadwal = Jadwal::find($id);
 
-
-            //konfirmasi absen
+            // Konfirmasi absen
             $absen_mahasiswa = AbsenMahasiswa::where('id_jadwal', $id)
                 ->whereNotExists(function ($query) use ($id) {
                     $query->select(DB::raw(1))
@@ -78,27 +75,21 @@ class JadwalController extends Controller
                 })
                 ->get();
 
-            if ($absen_mahasiswa != null) {
-                foreach ($absen_mahasiswa as $item) {
-                    $confirm = new AbsenConfirm();
-                    $confirm->id_jadwal = $item->id_jadwal;
-                    $confirm->id_user = $item->id_user;
-                    $confirm->id_absen = $item->id_absen;
-                    $confirm->save();
-                }
+            foreach ($absen_mahasiswa as $item) {
+                $confirm = new AbsenConfirm();
+                $confirm->id_jadwal = $item->id_jadwal;
+                $confirm->id_user = $item->id_user;
+                $confirm->id_absen = $item->id_absen;
+                $confirm->save();
             }
 
-            //hapus foto
-            $absen = Absen::where('id_jadwal', $id);
-            if ($absen != null) {
-                foreach ($absen->get() as $abs) {
-                    $foto_absen = AbsenFoto::where('id_absen', $abs->id_absen);
-                    if ($foto_absen != null) {
-                        foreach ($foto_absen->get() as $foto) {
-                            $foto_absen->delete();
-                            Storage::delete($foto->foto);
-                        }
-                    }
+            // Hapus foto
+            $absen = Absen::where('id_jadwal', $id)->get();
+            foreach ($absen as $abs) {
+                $foto_absen = AbsenFoto::where('id_absen', $abs->id_absen)->get();
+                foreach ($foto_absen as $foto) {
+                    $foto->delete();
+                    Storage::delete($foto->foto);
                 }
             }
 
@@ -109,16 +100,16 @@ class JadwalController extends Controller
                 'jadwal' => $jadwal,
                 'ijin' => $ijin,
                 'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
-                //konfirmasi absen otomatis
                 'absen' => $absen_latest,
-                'absen_confirm' => AbsenConfirm::where('id_absen', $absen_latest->id)->first(),
-                'absen_mahasiswa' => AbsenConfirm::where('id_absen', $absen_latest->id),
+                'absen_confirm' => AbsenConfirm::where('id_absen', optional($absen_latest)->id)->first(),
+                'absen_mahasiswa' => AbsenConfirm::where('id_absen', optional($absen_latest)->id)->get(),
             ];
             return view('pages.jadwal.show', $data);
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
     public function show_jadwal_mahasiswa($id)
     {
         $ID = Crypt::decryptString($id);
@@ -312,6 +303,22 @@ class JadwalController extends Controller
             $user = User::find($id_user);
 
             $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_user', [
+                'data' => $data,
+                'user' => $user,
+            ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);
+
+            return $pdf->stream('Jadwal ' . $user->name  . date('d-m-Y') . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+    public function exportJadwalMahasiswa($id_user)
+    {
+        try {
+            $data = JadwalMahasiswa::where('id_user', $id_user)->get();
+            $user = User::find($id_user);
+
+            $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_mahasiswa', [
                 'data' => $data,
                 'user' => $user,
             ])->setPaper('a4', 'landscape')->setOption(['dpi' => 150]);

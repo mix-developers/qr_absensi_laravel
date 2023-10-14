@@ -149,17 +149,23 @@
             $total_absen = $absen_exist->count();
 
         @endphp
-        <table class="table_custom" style="width: 100%;">
+        <table class="table_custom" style="width: 100%;font-size: 12px;">
             <thead>
                 <tr class=" align-middle text-center ">
-                    <th rowspan="2">No</th>
+                    <th rowspan="2" style="width: 12px;">No</th>
                     <th colspan="2">Mahasiswa</th>
                     <th colspan="16">Pertemuan</th>
                 </tr>
                 <tr class=" text-center">
                     <th>NPM</th>
                     <th>Nama</th>
-                    @for ($i = 1; $i <= 16; $i++)
+                    @foreach ($absen_exist->get() as $list)
+                        <th style="padding: 0px;">{{ $loop->iteration }}<br>
+                            <small
+                                style="font-size: 12px; margin-bottom:5px;">{{ $list->created_at->format('d/m/Y') }}</small>
+                        </th>
+                    @endforeach
+                    @for ($i = $total_absen + 1; $i <= 16; $i++)
                         <th>{{ $i }}
                         </th>
                     @endfor

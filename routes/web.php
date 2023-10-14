@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal');
     Route::get('/jadwal/show/{id}', [JadwalController::class, 'show'])->name('jadwal.show');
     Route::get('/jadwal/exportJadwal/{id}', [JadwalController::class, 'exportJadwal'])->name('jadwal.exportJadwal');
+    Route::get('/jadwal/exportJadwalMahasiswa/{id}', [JadwalController::class, 'exportJadwalMahasiswa'])->name('jadwal.exportJadwalMahasiswa');
     Route::get('/jadwal/exportJadwalAll', [JadwalController::class, 'exportJadwalAll'])->name('jadwal.exportJadwalAll');
 });
 // Grouping routes for admin middleware
