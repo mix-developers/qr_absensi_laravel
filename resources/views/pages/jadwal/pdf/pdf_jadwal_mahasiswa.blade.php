@@ -42,7 +42,7 @@
                 <td><b>{{ $user->name . ' ' . $user->last_name }}</b></td>
             </tr>
         </table>
-        <table class="table table-bordered">
+    <table class="table table-bordered">
             <thead class="bg-light">
                 <tr>
                     <th>#</th>

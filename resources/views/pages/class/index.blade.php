@@ -36,35 +36,38 @@
                             <h5>{{ $title }}</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-striped mb-0 lara-dataTable">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Kelas</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($class as $item)
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped mb-0 lara-dataTable">
+                                    <thead class="bg-light">
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td style="width: 300px;">
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#edit-{{ $item->id }}" class="btn btn-light-warning"><i
-                                                        class="fa fa-edit"></i>
-                                                </a>
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#delete-{{ $item->id }}"
-                                                    class="btn btn-light-danger"><i class="fa fa-trash"></i>
-                                                </a>
-                                                @include('pages.class.components.modal_edit')
-                                                @include('pages.class.components.modal_delete')
-                                            </td>
+                                            <th>#</th>
+                                            <th>Kelas</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($class as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td style="width: 300px;">
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#edit-{{ $item->id }}"
+                                                        class="btn btn-light-warning"><i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#delete-{{ $item->id }}"
+                                                        class="btn btn-light-danger"><i class="fa fa-trash"></i>
+                                                    </a>
+                                                    @include('pages.class.components.modal_edit')
+                                                    @include('pages.class.components.modal_delete')
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>

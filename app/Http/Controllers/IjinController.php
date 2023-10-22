@@ -97,11 +97,12 @@ class IjinController extends Controller
         try {
             $ijin = AbsenIjin::findOrFail($id);
             $ijin->konfirmasi = 2;
+            $ijin->message = $request->message;
             $ijin->save();
 
             $notif = new Notifikasi();
             $notif->id_user = $ijin->id_user;
-            $notif->content = 'Pengajuan ijin anda pada matakuliah ' . $ijin->jadwal->matakuliah->name . ' ditolak';
+            $notif->content = 'Pengajuan ijin anda pada matakuliah ' . $ijin->jadwal->matakuliah->name . ' ditolak dengan alasan : ' . $request->message;
             $notif->type = 'danger';
             $notif->url = '/ijin';
             $notif->save();

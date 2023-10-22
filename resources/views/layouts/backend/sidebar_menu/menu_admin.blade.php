@@ -11,6 +11,10 @@
             <label>Master Data</label>
         </li>
 
+        {{-- semester --}}
+        <li class="pc-item"><a href="{{ route('semester') }}" class="pc-link "><span class="pc-micon"><i
+                        data-feather="home"></i></span><span class="pc-mtext">{{ __('Semester') }}</span></a>
+        </li>
         {{-- kelas --}}
         <li class="pc-item"><a href="{{ route('class') }}" class="pc-link "><span class="pc-micon"><i
                         data-feather="home"></i></span><span class="pc-mtext">{{ __('Kelas') }}</span></a>
@@ -92,7 +96,8 @@
                             data-feather="target"></i></span><span class="pc-mtext">{{ __('Scan Absen') }}</span></a>
             </li>
             <li class="pc-item"><a href="{{ route('history') }}" class="pc-link "><span class="pc-micon"><i
-                            data-feather="book"></i></span><span class="pc-mtext">{{ __('HIstory Absen') }}</span></a>
+                            data-feather="book"></i></span><span
+                        class="pc-mtext">{{ __('HIstory Absen') }}</span></a>
             </li>
         @endif
     @endif

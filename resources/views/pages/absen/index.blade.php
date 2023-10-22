@@ -37,7 +37,10 @@
                                     <label for="day">Pilih Jadwal</label>
                                     <select class="form-control" name="id_jadwal">
                                         <option selected value="">--Pilih Jadwal--</option>
-                                        @foreach (App\Models\Jadwal::where('id_user', Auth::user()->id)->get() as $item)
+                                        @php
+                                            $semester = App\Models\Semester::latest()->first()->code;
+                                        @endphp
+                                        @foreach (App\Models\Jadwal::where('id_user', Auth::user()->id)->where('code', $semester)->get() as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->matakuliah->name . ' (' . $item->time_start . '-' . $item->time_end . ')' }}
                                             </option>

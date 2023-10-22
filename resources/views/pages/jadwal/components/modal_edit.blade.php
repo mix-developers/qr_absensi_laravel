@@ -8,6 +8,9 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
+            @php
+                $semester = App\Models\Semester::latest()->first()->code;
+            @endphp
             <form action="{{ route('jadwal.update', $item->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -51,7 +54,7 @@
                         <label for="day">Pilih Matakuliah</label>
                         <select class="form-control" name="id_matakuliah">
                             <option selected value="">--Pilih Matakuliah--</option>
-                            @foreach (App\Models\MataKuliah::all() as $list)
+                            @foreach (App\Models\MataKuliah::where('code', $semester)->get() as $list)
                                 <option value="{{ $list->id }}" @if ($list->id == $item->id_matakuliah) selected @endif>
                                     {{ $list->name }}</option>
                             @endforeach

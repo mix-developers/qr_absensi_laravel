@@ -10,6 +10,7 @@ use App\Models\AbsenMateri;
 use App\Models\Jadwal;
 use App\Models\JadwalMahasiswa;
 use App\Models\Notifikasi;
+use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -22,17 +23,25 @@ class AbsenController extends Controller
 {
     public function index()
     {
+        $semester = Semester::latest()->first()->code;
         $data = [
             'title' => 'Buat Absen',
-            'absen' => Absen::where('id_user', Auth::user()->id)->orderBy('id', 'desc')->get(),
+            'absen' => Absen::where('id_user', Auth::user()->id)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })->orderBy('id', 'desc')->get(),
         ];
         return view('pages.absen.index', $data);
     }
     public function history()
     {
+        $semester = Semester::latest()->first()->code;
         $data = [
             'title' => 'History Absen',
-            'history' => AbsenMahasiswa::where('id_user', Auth::user()->id)->get(),
+            'history' => AbsenMahasiswa::where('id_user', Auth::user()->id)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })->get(),
         ];
         return view('pages.absen.history', $data);
     }
@@ -144,6 +153,8 @@ class AbsenController extends Controller
                 'foto' => ['required', 'mimes:jpeg,png,jpg,gif'],
             ]);
 
+            $semester = Semester::latest()->first()->code;
+
             $code_bcript = $request->code;
             $latitude = $request->latitude;
             $longitude = $request->longitude;
@@ -152,10 +163,12 @@ class AbsenController extends Controller
 
             if ($absen != null) {
                 if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
-
                     $expired = $absen->expired_date;
                     if ($now < $expired) {
-                        $jadwal = Jadwal::find($absen->id_jadwal);
+                        $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id)
+                            ->whereHas('jadwal', function ($query) use ($semester) {
+                                $query->where('code', $semester);
+                            });
                         if ($jadwal != null) {
 
                             $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id)

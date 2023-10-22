@@ -7,6 +7,9 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
+            @php
+                $semester = App\Models\Semester::latest()->first()->code;
+            @endphp
             <form action="{{ route('jadwal.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
@@ -46,7 +49,7 @@
                         <label for="day">Pilih Matakuliah</label>
                         <select class="form-control" name="id_matakuliah">
                             <option selected value="">--Pilih Matakuliah--</option>
-                            @foreach (App\Models\MataKuliah::all() as $item)
+                            @foreach (App\Models\MataKuliah::where('code', $semester)->get() as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>

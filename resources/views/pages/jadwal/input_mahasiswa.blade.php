@@ -21,9 +21,12 @@
                                 <div class="form-group">
                                     <input type="hidden" name="id_user" value="{{ $user->id }}">
                                     <label for="day">Pilih Jadwal</label>
+                                    @php
+                                        $semester = App\Models\Semester::latest()->first()->code;
+                                    @endphp
                                     <select class="form-control" name="id_jadwal">
                                         <option selected value="">--Pilih Jadwal--</option>
-                                        @foreach (App\Models\Jadwal::all() as $item)
+                                        @foreach (App\Models\Jadwal::where('code', $semester)->get() as $item)
                                             <option value="{{ $item->id }}">
                                                 {{ $item->class->name . ' | ' . $item->matakuliah->name . ' (' . $item->time_start . '-' . $item->time_end . ')' }}
                                             </option>
@@ -43,42 +46,44 @@
                             <h5>{{ $title }}</h5>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered table-striped mb-0 lara-dataTable">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Jadwal</th>
-                                        <th>Ruangan</th>
-                                        <th>Kelas</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($jadwal_mahasiswa as $item)
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped mb-0 lara-dataTable">
+                                    <thead class="bg-light">
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>
-                                                <strong>{{ $item->jadwal->matakuliah->name }}</strong><br>
-                                                <small
-                                                    class="text-danger">{{ $item->jadwal->time_start . ' - ' . $item->jadwal->time_end }}</small>
-                                            </td>
-                                            <td>
-                                                {{ $item->jadwal->ruangan->name }}
-                                            </td>
-                                            <td>
-                                                {{ $item->jadwal->class->name }}
-                                            </td>
-                                            <td style="width: 100px;">
-                                                <a href="#" data-toggle="modal"
-                                                    data-target="#delete-input-{{ $item->id }}"
-                                                    class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
-                                                </a>
-                                                @include('pages.jadwal.components.modal_delete')
-                                            </td>
+                                            <th>#</th>
+                                            <th>Jadwal</th>
+                                            <th>Ruangan</th>
+                                            <th>Kelas</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($jadwal_mahasiswa as $item)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    <strong>{{ $item->jadwal->matakuliah->name }}</strong><br>
+                                                    <small
+                                                        class="text-danger">{{ $item->jadwal->time_start . ' - ' . $item->jadwal->time_end }}</small>
+                                                </td>
+                                                <td>
+                                                    {{ $item->jadwal->ruangan->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->jadwal->class->name }}
+                                                </td>
+                                                <td style="width: 100px;">
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#delete-input-{{ $item->id }}"
+                                                        class="btn btn-danger"><i class="fa fa-trash"></i> Hapus
+                                                    </a>
+                                                    @include('pages.jadwal.components.modal_delete')
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ use App\Models\AbsenMahasiswa;
 use App\Models\AbsenMateri;
 use App\Models\Jadwal;
 use App\Models\JadwalMahasiswa;
+use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PDO;
 
 class JadwalController extends Controller
 {
@@ -27,12 +29,17 @@ class JadwalController extends Controller
      */
     public function index()
     {
+        $semester = Semester::latest()->first()->code;
         if (Auth::user()->role == 'dosen' || Auth::user()->role == 'ketua_jurusan') {
-            $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
+            $jadwal = Jadwal::where('id_user', Auth::user()->id)->where('code', $semester)->get();
         } elseif (Auth::user()->role == 'mahasiswa') {
-            $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)->get();
+            $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })
+                ->get();
         } else {
-            $jadwal = Jadwal::all();
+            $jadwal = Jadwal::where('code', $semester)->get();
         }
         $data = [
             'title' => 'Data Jadwal Kuliah',
@@ -42,7 +49,12 @@ class JadwalController extends Controller
     }
     public function jadwal_mahasiswa()
     {
-        $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)->get();
+        $semester = Semester::latest()->first()->code;
+        $jadwal = JadwalMahasiswa::where('id_user', Auth::user()->id)
+            ->whereHas('jadwal', function ($query) use ($semester) {
+                $query->where('code', $semester);
+            })
+            ->get();
         $data = [
             'title' => ' Jadwal Kuliah',
             'jadwal' => $jadwal,
@@ -51,8 +63,8 @@ class JadwalController extends Controller
     }
     public function admin()
     {
-
-        $jadwal = Jadwal::all();
+        $semester = Semester::latest()->first()->code;
+        $jadwal = Jadwal::where('code', $semester)->get();
 
         $data = [
             'title' => 'Data Jadwa Kuliah',
@@ -63,6 +75,7 @@ class JadwalController extends Controller
     public function show($id)
     {
         try {
+            $semester = Semester::latest()->first()->code;
             $jadwal = Jadwal::find($id);
 
             // Konfirmasi absen
@@ -99,7 +112,10 @@ class JadwalController extends Controller
                 'title' => 'Data Absen Kuliah',
                 'jadwal' => $jadwal,
                 'ijin' => $ijin,
-                'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+                'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })
+                    ->get(),
                 'absen' => $absen_latest,
                 'absen_confirm' => AbsenConfirm::where('id_absen', optional($absen_latest)->id)->first(),
                 'absen_mahasiswa' => AbsenConfirm::where('id_absen', optional($absen_latest)->id)->get(),
@@ -112,37 +128,50 @@ class JadwalController extends Controller
 
     public function show_jadwal_mahasiswa($id)
     {
+        $semester = Semester::latest()->first()->code;
         $ID = Crypt::decryptString($id);
         // dd($id);
         $jadwal = Jadwal::find($ID);
         $data = [
             'title' => 'Data Absen Kuliah',
             'jadwal' => $jadwal,
-            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->whereHas('jadwal', function ($query) use ($semester) {
+                $query->where('code', $semester);
+            })
+                ->get(),
         ];
         return view('pages.jadwal.show', $data);
     }
     public function showAdmin($id)
     {
+        $semester = Semester::latest()->first()->code;
         $ID = Crypt::decryptString($id);
         // dd($id);
         $jadwal = Jadwal::find($ID);
         $data = [
             'title' => 'Data Absen Kuliah',
             'jadwal' => $jadwal,
-            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)->get(),
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_jadwal', $jadwal->id)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })
+                ->get(),
         ];
         return view('pages.jadwal.show', $data);
     }
     public function input_mahasiswa($id)
     {
+        $semester = Semester::latest()->first()->code;
         $user = User::find($id);
         // dd($id);
         $data = [
             'title' => 'Data Input Jadwal mahasiswa : ' . $user->name,
             'user' => $user,
             'jadwal' => Jadwal::all(),
-            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_user', $user->id)->get(),
+            'jadwal_mahasiswa' => JadwalMahasiswa::where('id_user', $user->id)->whereHas('jadwal', function ($query) use ($semester) {
+                $query->where('code', $semester);
+            })
+                ->get(),
         ];
         return view('pages.jadwal.input_mahasiswa', $data);
     }
@@ -202,9 +231,22 @@ class JadwalController extends Controller
                 'id_jadwal' => ['required'],
                 'id_user' => ['required'],
             ]);
-            $JadwalMahasiswa = new JadwalMahasiswa();
-            $JadwalMahasiswa->id_jadwal = $request->id_jadwal;
-            $JadwalMahasiswa->id_user = $request->id_user;
+            $semester = Semester::latest()->first()->code;
+            $check_jadwal_mahasiswa =  JadwalMahasiswa::where('id_jadwal', $request->id_jadwal)
+                ->where('id_user', $request->id_user)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })
+                ->count();
+            // dd($check_jadwal_mahasiswa);
+
+            if ($check_jadwal_mahasiswa == 0) {
+                $JadwalMahasiswa = new JadwalMahasiswa();
+                $JadwalMahasiswa->id_jadwal = $request->id_jadwal;
+                $JadwalMahasiswa->id_user = $request->id_user;
+            } else {
+                return redirect()->back()->with('danger', 'Matakuliah telah tersedia pada jadwal mahasiswa');
+            }
 
             if ($JadwalMahasiswa->save()) {
                 return redirect()->back()->with('success', 'Berhasil membuat jadwal');
@@ -279,8 +321,13 @@ class JadwalController extends Controller
     public function exportAbsen($id)
     {
         try {
+            $semester = Semester::latest()->first()->code;
             $jadwal = Jadwal::find($id);
-            $data = JadwalMahasiswa::where('id_jadwal', $id)->get();
+            $data = JadwalMahasiswa::where('id_jadwal', $id)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })
+                ->get();
             $ijin = AbsenIjin::where('id_jadwal', $id)->where('konfirmasi', 1)->get();
             $materi = AbsenMateri::where('id_jadwal', $id)->get();
 
@@ -299,7 +346,11 @@ class JadwalController extends Controller
     public function exportJadwal($id_user)
     {
         try {
-            $data = Jadwal::where('id_user', $id_user)->get();
+            $semester = Semester::latest()->first()->code;
+            $data = Jadwal::where('id_user', $id_user)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })->get();
             $user = User::find($id_user);
 
             $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_user', [
@@ -315,7 +366,11 @@ class JadwalController extends Controller
     public function exportJadwalMahasiswa($id_user)
     {
         try {
-            $data = JadwalMahasiswa::where('id_user', $id_user)->get();
+            $semester = Semester::latest()->first()->code;
+            $data = JadwalMahasiswa::where('id_user', $id_user)
+                ->whereHas('jadwal', function ($query) use ($semester) {
+                    $query->where('code', $semester);
+                })->get();
             $user = User::find($id_user);
 
             $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal_mahasiswa', [
@@ -331,7 +386,10 @@ class JadwalController extends Controller
     public function exportJadwalAll()
     {
         try {
-            $data = Jadwal::all();
+            $semester = Semester::latest()->first()->code;
+            $data = Jadwal::whereHas('jadwal', function ($query) use ($semester) {
+                $query->where('code', $semester);
+            })->get();
 
             $pdf =  \PDF::loadView('pages.jadwal.pdf.pdf_jadwal', [
                 'data' => $data,

@@ -11,6 +11,7 @@ use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\rerportController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\UserController;
 use App\Models\AbsenMateri;
 use App\Models\Configuration;
@@ -41,6 +42,11 @@ Route::middleware(['auth'])->group(function () {
 });
 // Grouping routes for admin middleware
 Route::middleware(['role:admin,super_admin'])->group(function () {
+    //route semester
+    Route::get('/semester', [SemesterController::class, 'index'])->name('semester');
+    Route::post('/semester/store', [SemesterController::class, 'store'])->name('semester.store');
+    Route::put('/semester/update/{id}', [SemesterController::class, 'update'])->name('semester.update');
+    Route::delete('/semester/destroy/{id}', [SemesterController::class, 'destroy'])->name('semester.destroy');
     //route class
     Route::get('/class', [ClassController::class, 'index'])->name('class');
     Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');

@@ -42,7 +42,6 @@
 
                     </div>
                     <div class="table-responsive">
-
                         <table class="table table-bordered table-striped mb-0 lara-dataTable">
                             <thead class="bg-light">
                                 <tr>
@@ -116,8 +115,6 @@
                                                         data-target="#delete-{{ $item->id }}"
                                                         class="btn btn-light-danger"><i class="fa fa-trash"></i>
                                                     </a>
-                                                    @include('pages.jadwal.components.modal_edit')
-                                                    @include('pages.jadwal.components.modal_delete')
                                                 @endif
                                             </td>
                                         @endif
@@ -132,5 +129,9 @@
     </div>
     @if (Auth::user()->role == 'admin' || Auth::user()->role == 'super_admin')
         @include('pages.jadwal.components.modal_create')
+        @foreach ($jadwal as $item)
+            @include('pages.jadwal.components.modal_edit')
+            @include('pages.jadwal.components.modal_delete')
+        @endforeach
     @endif
 @endsection

@@ -62,33 +62,36 @@
                                                 <span class="badge badge-light-success">Disetujui</span>
                                             @elseif($item->konfirmasi == 2)
                                                 <span class="badge badge-light-danger">Pengajuan ditolak</span>
+                                                <br>
+                                                <small>
+                                                    Keterangan : {{ $item->message }}
+                                                </small>
                                             @endif
                                         </td>
                                         @if (Auth::user()->role != 'mahasiswa')
                                             <td>
                                                 @if ($item->konfirmasi == 0)
                                                     <div class="form-inline">
-                                                        <form action="{{ route('ijin.terima', $item->id) }}" method="POST">
+                                                        <form action="{{ route('ijin.terima', $item->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <button type="submit"
                                                                 class="btn btn-sm btn-success mx-2">Terima</button>
                                                         </form>
-                                                        <form action="{{ route('ijin.tolak', $item->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <button type="submit"
-                                                                class="btn btn-sm btn-danger mx-2">Tolak</button>
-                                                        </form>
+                                                        <a href="#" data-toggle="modal"
+                                                            class="btn btn-sm btn-danger mx-2"
+                                                            data-target="#reject-{{ $item->id }}">
+                                                            Batalkam dan Tolak
+                                                        </a>
+
                                                     </div>
                                                 @elseif($item->konfirmasi == 1)
                                                     <span class="text-primary">Telah dikonfirmasi </span><br>
-                                                    <form action="{{ route('ijin.tolak', $item->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="btn btn-sm btn-danger ">batalkan
-                                                            dan tolak?</button>
-                                                    </form>
+                                                    <a href="#" data-toggle="modal" class="btn btn-sm btn-danger mx-2"
+                                                        data-target="#reject-{{ $item->id }}">
+                                                        Batalkam dan Tolak
+                                                    </a>
                                                 @elseif($item->konfirmasi == 2)
                                                     <span class="text-danger">Telah ditolak </span><br>
                                                     <form action="{{ route('ijin.terima', $item->id) }}" method="POST">
@@ -101,6 +104,7 @@
                                             </td>
                                         @endif
                                     </tr>
+                                    @include('pages.ijin.components.modal_reject')
                                     @include('pages.ijin.components.modal_foto')
                                 @endforeach
                             </tbody>
