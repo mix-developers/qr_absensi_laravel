@@ -195,6 +195,7 @@ class JadwalController extends Controller
     public function store(Request $request)
     {
         try {
+
             $request->validate([
                 'id_user' => ['required'],
                 'id_ruangan' => ['required'],
@@ -212,6 +213,9 @@ class JadwalController extends Controller
             $Jadwal->time_start = $request->time_start;
             $Jadwal->time_end = $request->time_end;
             $Jadwal->day = $request->day;
+
+            $semester = Semester::latest()->first()->code;
+            $Jadwal->code = $semester;
 
 
             if ($Jadwal->save()) {

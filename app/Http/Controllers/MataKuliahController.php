@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MataKuliah;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 
 class MataKuliahController extends Controller
@@ -47,6 +48,10 @@ class MataKuliahController extends Controller
         $MataKuliah = new MataKuliah();
         $MataKuliah->name = $request->name;
         $MataKuliah->sks = $request->sks;
+
+
+        $semester = Semester::latest()->first()->code;
+        $MataKuliah->code = $semester;
 
 
         if ($MataKuliah->save()) {
