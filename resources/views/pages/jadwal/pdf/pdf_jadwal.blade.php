@@ -34,7 +34,13 @@
             </tr>
         </table>
         <hr style="border: 1px solid black;">
-
+        <table class="table-borderless mb-3">
+            <tr>
+                <td>Semester</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $code }}</b></td>
+            </tr>
+        </table>
         <table class="table table-bordered">
             <thead class="bg-light">
                 <tr>

@@ -62,6 +62,11 @@
                 <td style="width: 15px" class="text-center">:</td>
                 <td><b>{{ $jadwal->user->name }}</b></td>
             </tr>
+            <tr>
+                <td>Semester</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->code }}</b></td>
+            </tr>
         </table>
         @php
             //master absen
@@ -141,6 +146,11 @@
                 <td>Dosen Pengampuh</td>
                 <td style="width: 15px" class="text-center">:</td>
                 <td><b>{{ $jadwal->user->name }}</b></td>
+            </tr>
+            <tr>
+                <td>Semester</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->code }}</b></td>
             </tr>
         </table>
         @php
@@ -257,6 +267,11 @@
                 <td>Dosen Pengampuh</td>
                 <td style="width: 15px" class="text-center">:</td>
                 <td><b>{{ $jadwal->user->name }}</b></td>
+            </tr>
+            <tr>
+                <td>Semester</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $jadwal->code }}</b></td>
             </tr>
         </table>
         <table class="table_custom" style="width: 100%;">

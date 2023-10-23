@@ -25,20 +25,32 @@
                     <h5>{{ $title }}</h5>
                 </div>
                 <div class="card-body">
-                    <div class="my-3 text-right">
-                        @if ($user == 'dosen' || $user == 'ketua_jurusan')
-                            <a href="{{ url('/jadwal/exportJadwal', Auth::user()->id) }}" class="btn btn-primary"
-                                target="__blank"><i class="fa fa-print"></i>
-                                Cetak Jadwal</a>
-                        @elseif($user == 'admin' || $user == 'super_admin')
-                            <a href="{{ url('/jadwal/exportJadwalAll') }}" class="btn btn-primary" target="__blank"><i
-                                    class="fa fa-print"></i>
-                                Cetak Jadwal</a>
-                        @else
-                            <a href="{{ url('/jadwal/exportJadwalMahasiswa', Auth::user()->id) }}" class="btn btn-primary"
-                                target="__blank"><i class="fa fa-print"></i>
-                                Cetak Jadwal</a>
-                        @endif
+                    <div class="mb-5 ">
+                        @php
+                            if ($user == 'dosen' || $user == 'ketua_jurusan') {
+                                $route_export = url('/jadwal/exportJadwal', Auth::user()->id);
+                            } elseif ($user == 'admin' || $user == 'super_admin') {
+                                $route_export = url('/jadwal/exportJadwalAll');
+                            } else {
+                                $route_export = url('/jadwal/exportJadwalMahasiswa', Auth::user()->id);
+                            }
+                        @endphp
+                        <form action="{{ $route_export }}" method="POST">
+                            @method('GET')
+                            <div class="form-inline d-flex justify-content-end">
+                                <div class="form-group">
+                                    <select name="code" class="form-control mx-2">
+                                        @foreach (App\Models\Semester::latest()->get() as $semester)
+                                            <option value="{{ $semester->code }}">
+                                                {{ $semester->code . ' (' . ($semester->type == 1 ? 'Ganjil' : 'Genap') . ')' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-print"></i> Cetak
+                                    Jadwal</button>
+                            </div>
+                        </form>
 
                     </div>
                     <div class="table-responsive">
@@ -46,6 +58,9 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th>#</th>
+                                    @if ($user != 'mahasiswa')
+                                        <th>semester</th>
+                                    @endif
                                     <th>Hari</th>
                                     <th>Jam</th>
                                     <th>Ruangan</th>
@@ -64,6 +79,9 @@
                                 @foreach ($jadwal as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        @if ($user != 'mahasiswa')
+                                            <td>{{ $item->code }}</td>
+                                        @endif
                                         <td>{{ $user == 'mahasiswa' ? $item->jadwal->day : $item->day }}</td>
                                         <td>{{ $user == 'mahasiswa' ? $item->jadwal->time_start : $item->time_start }} -
                                             {{ $user == 'mahasiswa' ? $item->jadwal->time_end : $item->time_end }} WIT

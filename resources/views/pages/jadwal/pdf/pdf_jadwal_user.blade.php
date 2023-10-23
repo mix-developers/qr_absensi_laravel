@@ -41,6 +41,11 @@
                 <td style="width: 15px" class="text-center">:</td>
                 <td><b>{{ $user->name . ' ' . $user->last_name }}</b></td>
             </tr>
+            <tr>
+                <td>Semester</td>
+                <td style="width: 15px" class="text-center">:</td>
+                <td><b>{{ $code }}</b></td>
+            </tr>
         </table>
         <table class="table table-bordered">
             <thead class="bg-light">
