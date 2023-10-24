@@ -15,13 +15,13 @@ class IjinController extends Controller
     public function index()
     {
         if (Auth::user()->role == 'mahasiswa') {
-            $ijin = AbsenIjin::where('id_user', Auth::user()->id)->get();
+            $ijin = AbsenIjin::where('id_user', Auth::user()->id)->latest()->get();
         } else {
             $jadwal = Jadwal::where('id_user', Auth::user()->id)->get();
 
             $jadwalIds = $jadwal->pluck('id')->toArray();
 
-            $ijin = AbsenIjin::whereIn('id_jadwal', $jadwalIds)->get();
+            $ijin = AbsenIjin::whereIn('id_jadwal', $jadwalIds)->latest()->get();
         }
         $data = [
             'title' => 'Pengajuan Ijin dan Sakit',
@@ -56,18 +56,20 @@ class IjinController extends Controller
             $AbsenIjin->foto =  isset($file_path) ? $file_path : null;
 
             $check_jadwal = Jadwal::findOrFail($AbsenIjin->id_jadwal)->first();
-
+            // dd($check_jadwal->id_user);
             $notif = new Notifikasi();
             $notif->id_user = $check_jadwal->id_user;
             $notif->content = 'Pengajuan ijin pada matakuliah ' . $AbsenIjin->jadwal->matakuliah->name;
             $notif->type = 'success';
             $notif->url = '/ijin';
-            $notif->save();
-
-            if ($AbsenIjin->save()) {
-                return redirect()->back()->with('success', 'Berhasil mengajukan ijin');
+            if ($notif->save()) {
+                if ($AbsenIjin->save()) {
+                    return redirect()->back()->with('success', 'Berhasil mengajukan ijin');
+                } else {
+                    return redirect()->back()->with('danger', 'Gagal mengajukan ijin');
+                }
             } else {
-                return redirect()->back()->with('danger', 'Gagal mengajukan ijin');
+                return redirect()->back()->with('danger', 'Gagal mengirim notifikasi');
             }
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());

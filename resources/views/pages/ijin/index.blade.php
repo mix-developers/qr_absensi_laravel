@@ -82,7 +82,7 @@
                                                         <a href="#" data-toggle="modal"
                                                             class="btn btn-sm btn-danger mx-2"
                                                             data-target="#reject-{{ $item->id }}">
-                                                            Batalkam dan Tolak
+                                                            Tolak
                                                         </a>
 
                                                     </div>

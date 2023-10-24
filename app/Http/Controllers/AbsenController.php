@@ -153,7 +153,6 @@ class AbsenController extends Controller
                 'foto' => ['required', 'mimes:jpeg,png,jpg,gif'],
             ]);
 
-            $semester = Semester::latest()->first()->code;
 
             $code_bcript = $request->code;
             $latitude = $request->latitude;
@@ -165,10 +164,7 @@ class AbsenController extends Controller
                 if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
                     $expired = $absen->expired_date;
                     if ($now < $expired) {
-                        $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id)
-                            ->whereHas('jadwal', function ($query) use ($semester) {
-                                $query->where('code', $semester);
-                            });
+                        $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id);
                         if ($jadwal != null) {
 
                             $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id)
