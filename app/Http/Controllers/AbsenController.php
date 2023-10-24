@@ -175,7 +175,7 @@ class AbsenController extends Controller
 
                         if ($absen_exist == 0) {
                             $Absen = new AbsenMahasiswa();
-                            $Absen->id_jadwal = $jadwal->id_jadwal;
+                            $Absen->id_jadwal = $absen->id_jadwal;
                             $Absen->id_absen = $absen->id;
                             $Absen->ip_public = file_get_contents('https://ipinfo.io/ip');
                             $Absen->id_user = Auth::user()->id;
