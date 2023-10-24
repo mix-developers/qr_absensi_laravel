@@ -145,75 +145,75 @@ class AbsenController extends Controller
 
     public function createAbsen(Request $request)
     {
-        try {
-            $request->validate([
-                'code' => ['required'],
-                'latitude' => ['required'],
-                'longitude' => ['required'],
-                'foto' => ['required', 'mimes:jpeg,png,jpg,gif'],
-            ]);
+        // try {
+        $request->validate([
+            'code' => ['required'],
+            'latitude' => ['required'],
+            'longitude' => ['required'],
+            'foto' => ['required', 'mimes:jpeg,png,jpg,gif'],
+        ]);
 
 
-            $code_bcript = $request->code;
-            $latitude = $request->latitude;
-            $longitude = $request->longitude;
-            $absen = Absen::where('code_absen', $code_bcript)->first();
-            $now = date('Y-m-d H:i');
+        $code_bcript = $request->code;
+        $latitude = $request->latitude;
+        $longitude = $request->longitude;
+        $absen = Absen::where('code_absen', $code_bcript)->first();
+        $now = date('Y-m-d H:i');
 
-            if ($absen != null) {
-                $absen_id = $absen->id;
+        if ($absen != null) {
+            $absen_id = $absen->id;
 
-                if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
-                    $expired = $absen->expired_date;
-                    if ($now < $expired) {
-                        $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id);
-                        if ($jadwal != null) {
+            if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
+                $expired = $absen->expired_date;
+                if ($now < $expired) {
+                    $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id);
+                    if ($jadwal != null) {
 
-                            $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id)
-                                ->where('id_absen', $absen_id)
-                                ->where('id_user', Auth::user()->id)
-                                ->count();
+                        $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id_jadwal)
+                            ->where('id_absen', $absen->id)
+                            ->where('id_user', Auth::user()->id)
+                            ->count();
 
-                            if ($absen_exist == 0) {
-                                $Absen = new AbsenMahasiswa();
-                                $Absen->id_jadwal = $jadwal->id;
-                                $Absen->id_absen = $absen->id;
-                                $Absen->ip_public = file_get_contents('https://ipinfo.io/ip');
-                                $Absen->id_user = Auth::user()->id;
+                        if ($absen_exist == 0) {
+                            $Absen = new AbsenMahasiswa();
+                            $Absen->id_jadwal = $jadwal->id;
+                            $Absen->id_absen = $absen->id;
+                            $Absen->ip_public = file_get_contents('https://ipinfo.io/ip');
+                            $Absen->id_user = Auth::user()->id;
 
-                                $Absen->save();
-                                $absen_foto = new AbsenFoto();
-                                if ($request->hasFile('foto')) {
-                                    $filename = Str::random(32) . '.' . $request->file('foto')->getClientOriginalExtension();
-                                    $file_path = $request->file('foto')->storeAs('public/fotos', $filename);
-                                }
-                                $absen_foto->id_absen = $absen->id;
-                                $absen_foto->id_user = Auth::user()->id;
-                                $absen_foto->foto =  isset($file_path) ? $file_path : null;
+                            $Absen->save();
+                            $absen_foto = new AbsenFoto();
+                            if ($request->hasFile('foto')) {
+                                $filename = Str::random(32) . '.' . $request->file('foto')->getClientOriginalExtension();
+                                $file_path = $request->file('foto')->storeAs('public/fotos', $filename);
+                            }
+                            $absen_foto->id_absen = $absen->id;
+                            $absen_foto->id_user = Auth::user()->id;
+                            $absen_foto->foto =  isset($file_path) ? $file_path : null;
 
-                                if ($absen_foto->save()) {
-                                    return redirect()->back()->with('success', 'Berhasil absen pada matakuliah ' . $jadwal->matakuliah->name);
-                                } else {
-                                    return redirect()->back()->with('danger', 'Gagal absen pada matakuliah ' . $jadwal->matakuliah->name);
-                                }
+                            if ($absen_foto->save()) {
+                                return redirect()->back()->with('success', 'Berhasil absen pada matakuliah ' . $jadwal->matakuliah->name);
                             } else {
-                                return redirect()->back()->with('danger', 'Anda telah melakukan absen pada matakuliah ' . $jadwal->matakuliah->name . ' beberapa saat lalu');
+                                return redirect()->back()->with('danger', 'Gagal absen pada matakuliah ' . $jadwal->matakuliah->name);
                             }
                         } else {
-                            return redirect()->back()->with('danger', 'Jadwal tidak tersedia');
+                            return redirect()->back()->with('danger', 'Anda telah melakukan absen pada matakuliah ' . $jadwal->matakuliah->name . ' beberapa saat lalu');
                         }
                     } else {
-                        return redirect()->back()->with('danger', 'Waktu absen telah berakhir, absen berlaku sampai : ' . $expired);
+                        return redirect()->back()->with('danger', 'Jadwal tidak tersedia');
                     }
                 } else {
-                    return redirect()->back()->with('danger', 'Anda berada di luar area absen');
+                    return redirect()->back()->with('danger', 'Waktu absen telah berakhir, absen berlaku sampai : ' . $expired);
                 }
             } else {
-                return redirect()->back()->with('danger', 'Qr code tak dikenali');
+                return redirect()->back()->with('danger', 'Anda berada di luar area absen');
             }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        } else {
+            return redirect()->back()->with('danger', 'Qr code tak dikenali');
         }
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with('danger', 'Terjadi kesalahan: ' . $e->getMessage());
+        // }
     }
 
     public function store(Request $request)
