@@ -169,7 +169,7 @@ class AbsenController extends Controller
                         $jadwal = JadwalMahasiswa::where('id_jadwal', $absen->id_jadwal)->where('id_user', Auth::user()->id);
                         if ($jadwal != null) {
 
-                            $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id_jadwal)
+                            $absen_exist = AbsenMahasiswa::where('id_jadwal', $absen->id_jadwal)
                                 ->where('id_absen', $absen->id)
                                 ->where('id_user', Auth::user()->id)
                                 ->count();
