@@ -161,6 +161,8 @@ class AbsenController extends Controller
             $now = date('Y-m-d H:i');
 
             if ($absen != null) {
+                $absen_id = $absen->id;
+
                 if ($latitude == $absen->latitude && $longitude == $absen->longitude) {
                     $expired = $absen->expired_date;
                     if ($now < $expired) {
@@ -168,7 +170,7 @@ class AbsenController extends Controller
                         if ($jadwal != null) {
 
                             $absen_exist = AbsenMahasiswa::where('id_jadwal', $jadwal->id)
-                                ->where('id_absen', $absen->id)
+                                ->where('id_absen', $absen_id)
                                 ->where('id_user', Auth::user()->id)
                                 ->count();
 
