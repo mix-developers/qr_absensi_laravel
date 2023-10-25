@@ -63,6 +63,15 @@ class AbsenController extends Controller
         ];
         return view('pages.absen.confirm', $data);
     }
+    public function qr($id)
+    {
+        $absen = Absen::find($id);
+        $data = [
+            'title' => 'Qr code absen ',
+            'absen' => $absen,
+        ];
+        return view('pages.absen.qr', $data);
+    }
     // public function storeConfirm(Request $request)
     // {
     //     try {

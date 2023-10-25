@@ -100,9 +100,9 @@
                                                         class="text-muted">{{ App\Models\AbsenMateri::getMateriAbsen($item->id) }}</small>
                                                 </td>
                                                 <td style="width: 200px;">
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#qr-{{ $item->id }}" class="btn btn-primary "><i
-                                                            class="fa fa-xs fa-qrcode"> </i>
+                                                    <a href="javascript:void(0);"
+                                                        onclick="window.open('{{ route('absen.qr', $item->id) }}','_blank','width:100','hight:100');return false;"
+                                                        class="btn btn-primary "><i class="fa fa-xs fa-qrcode"> </i>
                                                     </a>
                                                     <a href="#" data-toggle="modal"
                                                         data-target="#show-{{ $item->id }}" class="btn btn-info "><i

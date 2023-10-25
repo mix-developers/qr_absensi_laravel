@@ -55,7 +55,7 @@ class IjinController extends Controller
             }
             $AbsenIjin->foto =  isset($file_path) ? $file_path : null;
 
-            $check_jadwal = Jadwal::findOrFail($request->id_jadwal)->first();
+            $check_jadwal = Jadwal::find($request->id_jadwal);
 
             if ($check_jadwal == null) {
                 return redirect()->back()->with('danger', 'Gagal mendapatkan id absen');

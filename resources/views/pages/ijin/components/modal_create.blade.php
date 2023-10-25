@@ -34,7 +34,7 @@
                             @foreach (App\Models\JadwalMahasiswa::where('id_user', Auth::user()->id)->whereHas('jadwal', function ($query) use ($semester) {
             $query->where('code', $semester);
         })->get() as $item)
-                                <option value="{{ $item->jadwal->id }}">{{ $item->jadwal->matakuliah->name }},
+                                <option value="{{ $item->id_jadwal }}">{{ $item->jadwal->matakuliah->name }},
                                     Kelas {{ $item->jadwal->class->name }}</option>
                             @endforeach
                         </select>

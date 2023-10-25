@@ -108,6 +108,7 @@ Route::middleware(['role:dosen,mahasiswa,ketua_jurusan'])->group(function () {
 });
 Route::middleware(['role:dosen,ketua_jurusan'])->group(function () {
     Route::get('/absen', [AbsenController::class, 'index'])->name('absen');
+    Route::get('/absen/qr/{id}', [AbsenController::class, 'qr'])->name('absen.qr');
     Route::post('/absen/store', [AbsenController::class, 'store'])->name('absen.store');
     Route::post('/absen/storeConfirm', [AbsenController::class, 'storeConfirm'])->name('absen.storeConfirm');
     Route::get('/absen/confirm/{id}', [AbsenController::class, 'confirm'])->name('absen.confirm');
